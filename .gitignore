@@ -1,0 +1,28 @@
+# dev files
+.idea/
+.clang-format
+apply-format
+
+# CMake
+cmake-build-*/
+CMakeFiles/
+*.cmake
+CMakeCache.txt
+
+# compiled binaries and library objects
+*.so
+*.out
+*.o
+
+# Python environment and cache
+*.pyc
+__pycache__/
+.venv/
+
+# generated files and executables
+blackboxes/
+
+*.json
+
+target/
+test_run_dir/
