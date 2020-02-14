@@ -44,17 +44,17 @@ if __name__ == "__main__":
         minf.disable_runtime_warnings(["SC_ID_NO_SC_START_ACTIVITY_"])
         minf.generate_bbox()
 
-        sc_exp = SystemC(
+        sc_mul = SystemC(
             **ARGS,
-            module="sc_exp",
+            module="sc_mul",
         )
-        sc_exp.set_ports((
-            ("input", "operand", "<float>", 12),
+        sc_mul.set_ports((
+            ("input", "operandf", "<float>", 12),
             ("output", "data_out", "<float>", 12),
         ))
-        sc_exp.fixed_width_float_output(9)
-        sc_exp.disable_runtime_warnings(["SC_ID_NO_SC_START_ACTIVITY_"])
-        sc_exp.generate_bbox()
+        sc_mul.fixed_width_float_output(9)
+        sc_mul.disable_runtime_warnings(["SC_ID_NO_SC_START_ACTIVITY_"])
+        sc_mul.generate_bbox()
 
         rng = SystemC(
             **ARGS,
@@ -71,16 +71,16 @@ if __name__ == "__main__":
         rng.disable_runtime_warnings(["SC_ID_NO_SC_START_ACTIVITY_"])
         rng.generate_bbox()
 
-        sc_ceil = SystemC(
+        sc_floor = SystemC(
             **ARGS,
-            module="sc_ceil",
+            module="sc_floor",
         )
-        sc_ceil.set_ports((
+        sc_floor.set_ports((
             ("input", "operand", "<float>", 12),
             ("output", "data_out", "<sc_uint<25>>"),
         ))
-        sc_ceil.disable_runtime_warnings(["SC_ID_NO_SC_START_ACTIVITY_"])
-        sc_ceil.generate_bbox()
+        sc_floor.disable_runtime_warnings(["SC_ID_NO_SC_START_ACTIVITY_"])
+        sc_floor.generate_bbox()
 
     elif sys.argv[-1] == "pyrtl":
         mutation = PyRTL(

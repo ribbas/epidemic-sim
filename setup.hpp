@@ -75,29 +75,29 @@ plague::plague(SST::ComponentId_t id, SST::Params &params) :
                 "randf_rsrch_dout",
                 new SST::Event::Handler<plague>(this, &plague::randf_rsrch))
         ),
-        // initialize exp population infected links
-        exp_pop_inf_din_link(configureLink("exp_pop_inf_din")),
-        exp_pop_inf_dout_link(configureLink(
-                "exp_pop_inf_dout",
-                new SST::Event::Handler<plague>(this, &plague::exp_pop_inf))
+        // initialize mul population infected links
+        mul_pop_inf_din_link(configureLink("mul_pop_inf_din")),
+        mul_pop_inf_dout_link(configureLink(
+                "mul_pop_inf_dout",
+                new SST::Event::Handler<plague>(this, &plague::mul_pop_inf))
         ),
-        // initialize cure threshold ceiling links
-        ceil_cure_thresh_din_link(configureLink("ceil_cure_thresh_din")),
-        ceil_cure_thresh_dout_link(configureLink(
-                "ceil_cure_thresh_dout",
-                new SST::Event::Handler<plague>(this, &plague::ceil_cure_thresh))
+        // initialize cure threshold floor links
+        floor_cure_thresh_din_link(configureLink("floor_cure_thresh_din")),
+        floor_cure_thresh_dout_link(configureLink(
+                "floor_cure_thresh_dout",
+                new SST::Event::Handler<plague>(this, &plague::floor_cure_thresh))
         ),
-        // initialize population infected ceiling links
-        ceil_pop_inf_din_link(configureLink("ceil_pop_inf_din")),
-        ceil_pop_inf_dout_link(configureLink(
-                "ceil_pop_inf_dout",
-                new SST::Event::Handler<plague>(this, &plague::ceil_pop_inf))
+        // initialize population infected floor links
+        floor_pop_inf_din_link(configureLink("floor_pop_inf_din")),
+        floor_pop_inf_dout_link(configureLink(
+                "floor_pop_inf_dout",
+                new SST::Event::Handler<plague>(this, &plague::floor_pop_inf))
         ),
-        // initialize population dead ceiling links
-        ceil_pop_dead_din_link(configureLink("ceil_pop_dead_din")),
-        ceil_pop_dead_dout_link(configureLink(
-                "ceil_pop_dead_dout",
-                new SST::Event::Handler<plague>(this, &plague::ceil_pop_dead))
+        // initialize population dead floor links
+        floor_pop_dead_din_link(configureLink("floor_pop_dead_din")),
+        floor_pop_dead_dout_link(configureLink(
+                "floor_pop_dead_dout",
+                new SST::Event::Handler<plague>(this, &plague::floor_pop_dead))
         ),
         // initialize minimum lethality links
         min_fat_din_link(configureLink("min_fat_din")),

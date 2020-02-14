@@ -27,7 +27,7 @@ plague_main = sst.Component(
 # 15462
 plague_main.addParams({
     "CLOCK": CLOCK,
-    "SEED0": "00021",
+    "SEED0": "99995",
 })
 
 # SystemC components
@@ -98,37 +98,37 @@ randf_rsrch_comp.addParams({
     "ipc_port": get_rand_tmp(),
 })
 
-# Ceiling components
-ceil_cure_thresh_comp = sst.Component(
-    "Ceiling Component for Cure Threshold (SystemC)", "plague.sc_ceil")
-ceil_cure_thresh_comp.addParams({
+# Floor components
+floor_cure_thresh_comp = sst.Component(
+    "Floor Component for Cure Threshold (SystemC)", "plague.sc_floor")
+floor_cure_thresh_comp.addParams({
     "clock": CLOCK,
-    "proc": os.path.join(BASE_PATH, "sc_ceil.o"),
+    "proc": os.path.join(BASE_PATH, "sc_floor.o"),
     "ipc_port": get_rand_tmp(),
 })
 
-ceil_pop_inf_comp = sst.Component(
-    "Ceiling Component for Infected Population (SystemC)", "plague.sc_ceil")
-ceil_pop_inf_comp.addParams({
+floor_pop_inf_comp = sst.Component(
+    "Floor Component for Infected Population (SystemC)", "plague.sc_floor")
+floor_pop_inf_comp.addParams({
     "clock": CLOCK,
-    "proc": os.path.join(BASE_PATH, "sc_ceil.o"),
+    "proc": os.path.join(BASE_PATH, "sc_floor.o"),
     "ipc_port": get_rand_tmp(),
 })
 
-ceil_pop_dead_comp = sst.Component(
-    "Ceiling Component for Dead Population (SystemC)", "plague.sc_ceil")
-ceil_pop_dead_comp.addParams({
+floor_pop_dead_comp = sst.Component(
+    "Floor Component for Dead Population (SystemC)", "plague.sc_floor")
+floor_pop_dead_comp.addParams({
     "clock": CLOCK,
-    "proc": os.path.join(BASE_PATH, "sc_ceil.o"),
+    "proc": os.path.join(BASE_PATH, "sc_floor.o"),
     "ipc_port": get_rand_tmp(),
 })
 
-# Exponential components
-exp_pop_inf_comp = sst.Component(
-    "Exponential Infectivity Component (SystemC)", "plague.sc_exp")
-exp_pop_inf_comp.addParams({
+# mulonential components
+mul_pop_inf_comp = sst.Component(
+    "Multiplication Infectivity Component (SystemC)", "plague.sc_mul")
+mul_pop_inf_comp.addParams({
     "clock": CLOCK,
-    "proc": os.path.join(BASE_PATH, "sc_exp.o"),
+    "proc": os.path.join(BASE_PATH, "sc_mul.o"),
     "ipc_port": get_rand_tmp(),
 })
 
@@ -196,11 +196,11 @@ connect_comps(randf_rsrch_comp, plague_main, "randf", "randf_rsrch")
 connect_comps(minf_fat_comp, plague_main, "minf", "min_fat")
 connect_comps(minf_inf_comp, plague_main, "minf", "min_inf")
 
-connect_comps(ceil_cure_thresh_comp, plague_main, "sc_ceil", "ceil_cure_thresh")
-connect_comps(ceil_pop_inf_comp, plague_main, "sc_ceil", "ceil_pop_inf")
-connect_comps(ceil_pop_dead_comp, plague_main, "sc_ceil", "ceil_pop_dead")
+connect_comps(floor_cure_thresh_comp, plague_main, "sc_floor", "floor_cure_thresh")
+connect_comps(floor_pop_inf_comp, plague_main, "sc_floor", "floor_pop_inf")
+connect_comps(floor_pop_dead_comp, plague_main, "sc_floor", "floor_pop_dead")
 
-connect_comps(exp_pop_inf_comp, plague_main, "sc_exp", "exp_pop_inf")
+connect_comps(mul_pop_inf_comp, plague_main, "sc_mul", "mul_pop_inf")
 
 connect_comps(flash_mem_comp, plague_main, "flash_mem", "flash_mem")
 

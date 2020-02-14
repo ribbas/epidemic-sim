@@ -138,14 +138,14 @@ void plague::randf_br(SST::Event *ev) {
 
 }
 
-void plague::ceil_cure_thresh(SST::Event *ev) {
+void plague::floor_cure_thresh(SST::Event *ev) {
 
     auto *se = dynamic_cast<SST::Interfaces::StringEvent *>(ev);
 
     if (se && m_keep_recv) {
 
-        std::string cure_threshold_str = se->getString();
-        m_cure_threshold = std::stoi(cure_threshold_str) / std::stoi(m_limit);
+        m_cure_threshold = std::stoi(se->getString()) / std::stoi(m_limit);
+
     }
 
     delete se;
@@ -212,7 +212,7 @@ void plague::randf_inf(SST::Event *ev) {
                     std::to_string(_keep_send) +
                     std::to_string(_keep_recv) +
                     align_signal_width(10, m_infectivity + std::stof(se->getString())) +
-                    "0.50"
+                    "0.25"
             ));
 
         }
@@ -237,7 +237,7 @@ void plague::min_inf(SST::Event *ev) {
             m_mutate_lock = false;
         }
 
-        exp_pop_inf_din_link->send(new SST::Interfaces::StringEvent(
+        mul_pop_inf_din_link->send(new SST::Interfaces::StringEvent(
                 std::to_string(_keep_send) +
                 std::to_string(_keep_recv) +
                 align_signal_width(10, m_infectivity)
@@ -249,7 +249,7 @@ void plague::min_inf(SST::Event *ev) {
 
 }
 
-void plague::exp_pop_inf(SST::Event *ev) {
+void plague::mul_pop_inf(SST::Event *ev) {
 
     auto *se = dynamic_cast<SST::Interfaces::StringEvent *>(ev);
     bool _keep_send = m_cycle < SIMTIME - 3;
@@ -257,7 +257,7 @@ void plague::exp_pop_inf(SST::Event *ev) {
 
     if (se && m_cycle < LOOPEND - 1) {
 
-        ceil_pop_inf_din_link->send(new SST::Interfaces::StringEvent(
+        floor_pop_inf_din_link->send(new SST::Interfaces::StringEvent(
                 std::to_string(_keep_send) +
                 std::to_string(_keep_recv) +
                 align_signal_width(2, std::stof(se->getString()) * m_batch_infected)
@@ -282,7 +282,7 @@ void plague::rng_pop_inf(SST::Event *ev) {
 
 }
 
-void plague::ceil_pop_inf(SST::Event *ev) {
+void plague::floor_pop_inf(SST::Event *ev) {
 
     auto *se = dynamic_cast<SST::Interfaces::StringEvent *>(ev);
     bool _keep_send = m_cycle < SIMTIME - 4;
@@ -292,7 +292,7 @@ void plague::ceil_pop_inf(SST::Event *ev) {
 
         m_total_infected_today = std::stoi(se->getString());
 
-        ceil_pop_dead_din_link->send(new SST::Interfaces::StringEvent(
+        floor_pop_dead_din_link->send(new SST::Interfaces::StringEvent(
                 std::to_string(_keep_send) +
                 std::to_string(_keep_recv) +
                 align_signal_width(2, m_total_infected_today * m_fatality)
@@ -304,7 +304,7 @@ void plague::ceil_pop_inf(SST::Event *ev) {
 
 }
 
-void plague::ceil_pop_dead(SST::Event *ev) {
+void plague::floor_pop_dead(SST::Event *ev) {
 
     auto *se = dynamic_cast<SST::Interfaces::StringEvent *>(ev);
 

@@ -67,7 +67,7 @@ bool plague::tick(SST::Cycle_t current_cycle) {
                     std::to_string(m_keep_recv) +
                     "1" +
                     seed_lim +
-                    "0201000" +
+                    "0209999" +
                     current_cycle_str
             ));
 
@@ -75,7 +75,7 @@ bool plague::tick(SST::Cycle_t current_cycle) {
 
         if (current_cycle == LOOPBEGIN + 1) {
 
-            ceil_cure_thresh_din_link->send(new SST::Interfaces::StringEvent(
+            floor_cure_thresh_din_link->send(new SST::Interfaces::StringEvent(
                     std::to_string(m_keep_send) +
                     std::to_string(m_keep_recv) +
                     align_signal_width(8, m_severity * m_birth_rate * POPULATION_TOTAL)
@@ -110,7 +110,7 @@ bool plague::tick(SST::Cycle_t current_cycle) {
                     std::to_string(m_keep_recv) +
                     "1" +
                     seed_pop_inf +
-                    "0020010" +
+                    "0010002" +
                     current_cycle_str
             ));
 
@@ -154,7 +154,7 @@ bool plague::tick(SST::Cycle_t current_cycle) {
                     current_cycle_str
             ));
 
-            ceil_cure_thresh_din_link->send(new SST::Interfaces::StringEvent(
+            floor_cure_thresh_din_link->send(new SST::Interfaces::StringEvent(
                     std::to_string(m_keep_send) +
                     std::to_string(m_keep_recv) +
                     "0.00"

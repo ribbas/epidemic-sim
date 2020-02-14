@@ -2,16 +2,16 @@
 
 #include <systemc.h>
 
-SC_MODULE(sc_ceil) {
+SC_MODULE(sc_floor) {
     sc_in<float> operand;
     sc_out<sc_uint<25> > data_out;
 
-    void do_ceil() {
-        data_out.write(ceil(operand.read()));
+    void do_floor() {
+        data_out.write(floor(operand.read()));
     }
 
-    SC_CTOR(sc_ceil) {
-        SC_METHOD(do_ceil);
+    SC_CTOR(sc_floor) {
+        SC_METHOD(do_floor);
         sensitive << operand;
     }
 };

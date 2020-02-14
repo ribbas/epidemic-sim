@@ -49,13 +49,13 @@ public:
 
     void min_inf(SST::Event *);
 
-    void ceil_cure_thresh(SST::Event *);
+    void floor_cure_thresh(SST::Event *);
 
-    void ceil_pop_inf(SST::Event *);
+    void floor_pop_inf(SST::Event *);
 
-    void ceil_pop_dead(SST::Event *);
+    void floor_pop_dead(SST::Event *);
 
-    void exp_pop_inf(SST::Event *);
+    void mul_pop_inf(SST::Event *);
 
     SST_ELI_REGISTER_COMPONENT(
             plague,
@@ -77,8 +77,8 @@ public:
             { "rng_pop_inf_din", "rng_pop_inf_din", { "sst.Interfaces.StringEvent" }},
             { "rng_mut_dout", "rng_mut_dout", { "sst.Interfaces.StringEvent" }},
             { "rng_mut_din", "rng_mut_din", { "sst.Interfaces.StringEvent" }},
-            { "exp_pop_inf_din", "exp_pop_inf_din", { "sst.Interfaces.StringEvent" }},
-            { "exp_pop_inf_dout", "exp_pop_inf_dout", { "sst.Interfaces.StringEvent" }},
+            { "mul_pop_inf_din", "mul_pop_inf_din", { "sst.Interfaces.StringEvent" }},
+            { "mul_pop_inf_dout", "mul_pop_inf_dout", { "sst.Interfaces.StringEvent" }},
             { "randf_sev_din", "randf_sev_din", { "sst.Interfaces.StringEvent" }},
             { "randf_sev_dout", "randf_sev_dout", { "sst.Interfaces.StringEvent" }},
             { "randf_inf_din", "randf_inf_din", { "sst.Interfaces.StringEvent" }},
@@ -89,16 +89,16 @@ public:
             { "randf_br_dout", "randf_br_dout", { "sst.Interfaces.StringEvent" }},
             { "randf_rsrch_din", "randf_rsrch_din", { "sst.Interfaces.StringEvent" }},
             { "randf_rsrch_dout", "randf_rsrch_dout", { "sst.Interfaces.StringEvent" }},
-            { "ceil_pop_dead_din", "ceil_pop_dead_din", { "sst.Interfaces.StringEvent" }},
-            { "ceil_pop_dead_dout", "ceil_pop_dead_dout", { "sst.Interfaces.StringEvent" }},
+            { "floor_pop_dead_din", "floor_pop_dead_din", { "sst.Interfaces.StringEvent" }},
+            { "floor_pop_dead_dout", "floor_pop_dead_dout", { "sst.Interfaces.StringEvent" }},
             { "min_fat_din", "min_fat_din", { "sst.Interfaces.StringEvent" }},
             { "min_fat_dout", "min_fat_dout", { "sst.Interfaces.StringEvent" }},
             { "min_inf_din", "min_inf_din", { "sst.Interfaces.StringEvent" }},
             { "min_inf_dout", "min_inf_dout", { "sst.Interfaces.StringEvent" }},
-            { "ceil_cure_thresh_din", "ceil_cure_thresh_din", { "sst.Interfaces.StringEvent" }},
-            { "ceil_cure_thresh_dout", "ceil_cure_thresh_dout", { "sst.Interfaces.StringEvent" }},
-            { "ceil_pop_inf_din", "ceil_pop_inf_din", { "sst.Interfaces.StringEvent" }},
-            { "ceil_pop_inf_dout", "ceil_pop_inf_dout", { "sst.Interfaces.StringEvent" }},
+            { "floor_cure_thresh_din", "floor_cure_thresh_din", { "sst.Interfaces.StringEvent" }},
+            { "floor_cure_thresh_dout", "floor_cure_thresh_dout", { "sst.Interfaces.StringEvent" }},
+            { "floor_pop_inf_din", "floor_pop_inf_din", { "sst.Interfaces.StringEvent" }},
+            { "floor_pop_inf_dout", "floor_pop_inf_dout", { "sst.Interfaces.StringEvent" }},
             { "flash_mem_din", "flash_mem_din", { "sst.Interfaces.StringEvent" }},
             { "flash_mem_dout", "flash_mem_dout", { "sst.Interfaces.StringEvent" }},
             { "mutation_din", "mutation_din", { "sst.Interfaces.StringEvent" }},
@@ -124,10 +124,10 @@ private:
             *randf_sev_din_link, *randf_sev_dout_link,
             *randf_br_din_link, *randf_br_dout_link,
             *randf_rsrch_din_link, *randf_rsrch_dout_link,
-            *exp_pop_inf_din_link, *exp_pop_inf_dout_link,
-            *ceil_cure_thresh_din_link, *ceil_cure_thresh_dout_link,
-            *ceil_pop_inf_din_link, *ceil_pop_inf_dout_link,
-            *ceil_pop_dead_din_link, *ceil_pop_dead_dout_link,
+            *mul_pop_inf_din_link, *mul_pop_inf_dout_link,
+            *floor_cure_thresh_din_link, *floor_cure_thresh_dout_link,
+            *floor_pop_inf_din_link, *floor_pop_inf_dout_link,
+            *floor_pop_dead_din_link, *floor_pop_dead_dout_link,
             *min_fat_din_link, *min_fat_dout_link,
             *min_inf_din_link, *min_inf_dout_link;
 
