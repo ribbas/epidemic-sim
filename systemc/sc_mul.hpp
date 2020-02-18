@@ -3,15 +3,16 @@
 #include <systemc.h>
 
 SC_MODULE(sc_mul) {
+    sc_in<sc_uint<10> > operandi;
     sc_in<float> operandf;
     sc_out<float> data_out;
 
     void do_mul() {
-        data_out.write(2 * (operandf.read()));
+        data_out.write(operandi.read() * operandf.read());
     }
 
     SC_CTOR(sc_mul) {
         SC_METHOD(do_mul);
-        sensitive << operandf;
+        sensitive << operandi << operandf;
     }
 };

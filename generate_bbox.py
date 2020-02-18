@@ -49,6 +49,7 @@ if __name__ == "__main__":
             module="sc_mul",
         )
         sc_mul.set_ports((
+            ("input", "operandi", "<sc_uint<10>>"),
             ("input", "operandf", "<float>", 12),
             ("output", "data_out", "<float>", 12),
         ))

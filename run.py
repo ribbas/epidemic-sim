@@ -24,10 +24,9 @@ def get_rand_tmp():
 ###############################################################################
 plague_main = sst.Component(
     "Plague Simulation Driver", "plague.plague")
-# 15462
 plague_main.addParams({
     "CLOCK": CLOCK,
-    "SEED0": "99995",
+    "SEED0": "15462",
 })
 
 # SystemC components
@@ -125,8 +124,16 @@ floor_pop_dead_comp.addParams({
 
 # mulonential components
 mul_pop_inf_comp = sst.Component(
-    "Multiplication Infectivity Component (SystemC)", "plague.sc_mul")
+    "Population Infected Multiplication Component (SystemC)", "plague.sc_mul")
 mul_pop_inf_comp.addParams({
+    "clock": CLOCK,
+    "proc": os.path.join(BASE_PATH, "sc_mul.o"),
+    "ipc_port": get_rand_tmp(),
+})
+
+mul_pop_dead_comp = sst.Component(
+    "Population Dead Multiplication Component (SystemC)", "plague.sc_mul")
+mul_pop_dead_comp.addParams({
     "clock": CLOCK,
     "proc": os.path.join(BASE_PATH, "sc_mul.o"),
     "ipc_port": get_rand_tmp(),
@@ -159,7 +166,7 @@ flash_mem_comp.addParams({
     "ipc_port": get_rand_tmp(),
 })
 
-# PyRTL
+# PyRTL components
 ###############################################################################
 print(os.path.join(BASE_PATH, "../pyrtl/blackboxes/mutation_driver.py"))
 mutation_comp = sst.Component(
@@ -201,6 +208,7 @@ connect_comps(floor_pop_inf_comp, plague_main, "sc_floor", "floor_pop_inf")
 connect_comps(floor_pop_dead_comp, plague_main, "sc_floor", "floor_pop_dead")
 
 connect_comps(mul_pop_inf_comp, plague_main, "sc_mul", "mul_pop_inf")
+connect_comps(mul_pop_dead_comp, plague_main, "sc_mul", "mul_pop_dead")
 
 connect_comps(flash_mem_comp, plague_main, "flash_mem", "flash_mem")
 

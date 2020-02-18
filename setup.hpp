@@ -81,6 +81,12 @@ plague::plague(SST::ComponentId_t id, SST::Params &params) :
                 "mul_pop_inf_dout",
                 new SST::Event::Handler<plague>(this, &plague::mul_pop_inf))
         ),
+        // initialize mul batch infected links
+        mul_pop_dead_din_link(configureLink("mul_pop_dead_din")),
+        mul_pop_dead_dout_link(configureLink(
+                "mul_pop_dead_dout",
+                new SST::Event::Handler<plague>(this, &plague::mul_pop_dead))
+        ),
         // initialize cure threshold floor links
         floor_cure_thresh_din_link(configureLink("floor_cure_thresh_din")),
         floor_cure_thresh_dout_link(configureLink(

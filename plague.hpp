@@ -57,6 +57,8 @@ public:
 
     void mul_pop_inf(SST::Event *);
 
+    void mul_pop_dead(SST::Event *);
+
     SST_ELI_REGISTER_COMPONENT(
             plague,
             "plague",
@@ -79,6 +81,8 @@ public:
             { "rng_mut_din", "rng_mut_din", { "sst.Interfaces.StringEvent" }},
             { "mul_pop_inf_din", "mul_pop_inf_din", { "sst.Interfaces.StringEvent" }},
             { "mul_pop_inf_dout", "mul_pop_inf_dout", { "sst.Interfaces.StringEvent" }},
+            { "mul_pop_dead_din", "mul_pop_dead_din", { "sst.Interfaces.StringEvent" }},
+            { "mul_pop_dead_dout", "mul_pop_dead_dout", { "sst.Interfaces.StringEvent" }},
             { "randf_sev_din", "randf_sev_din", { "sst.Interfaces.StringEvent" }},
             { "randf_sev_dout", "randf_sev_dout", { "sst.Interfaces.StringEvent" }},
             { "randf_inf_din", "randf_inf_din", { "sst.Interfaces.StringEvent" }},
@@ -125,6 +129,7 @@ private:
             *randf_br_din_link, *randf_br_dout_link,
             *randf_rsrch_din_link, *randf_rsrch_dout_link,
             *mul_pop_inf_din_link, *mul_pop_inf_dout_link,
+            *mul_pop_dead_din_link, *mul_pop_dead_dout_link,
             *floor_cure_thresh_din_link, *floor_cure_thresh_dout_link,
             *floor_pop_inf_din_link, *floor_pop_inf_dout_link,
             *floor_pop_dead_din_link, *floor_pop_dead_dout_link,

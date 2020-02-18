@@ -110,7 +110,7 @@ bool plague::tick(SST::Cycle_t current_cycle) {
                     std::to_string(m_keep_recv) +
                     "1" +
                     seed_pop_inf +
-                    "0010002" +
+                    "0010010" +
                     current_cycle_str
             ));
 

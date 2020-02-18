@@ -32,16 +32,15 @@ void plague::mutation(SST::Event *ev) {
         m_gene = std::stoi(se->getString());
         switch (m_gene) {
             case 0:
-                // std::cout << "NEUTRAL\n";
+                // no mutation
                 break;
             case 1:
-                // std::cout << "GOOD\n";
+                // mutation that decreases infectivity of strain
                 m_infectivity = abs(m_infectivity - m_research);
-                // std::cout << m_cycle << " INF (ABS) " << INFECTIVITY << '\n';
                 m_mutate_lock = true;
                 break;
             case 2:
-                // std::cout << "BAD\n";
+                // mutation that increases immunity of strain
                 m_cure -= m_research;
                 break;
         }
@@ -237,9 +236,13 @@ void plague::min_inf(SST::Event *ev) {
             m_mutate_lock = false;
         }
 
+        std::string batch_inf_str = std::to_string(m_batch_infected);
+        align_signal_width('0', 4, batch_inf_str);
+
         mul_pop_inf_din_link->send(new SST::Interfaces::StringEvent(
                 std::to_string(_keep_send) +
                 std::to_string(_keep_recv) +
+                batch_inf_str +
                 align_signal_width(10, m_infectivity)
         ));
 
@@ -260,7 +263,7 @@ void plague::mul_pop_inf(SST::Event *ev) {
         floor_pop_inf_din_link->send(new SST::Interfaces::StringEvent(
                 std::to_string(_keep_send) +
                 std::to_string(_keep_recv) +
-                align_signal_width(2, std::stof(se->getString()) * m_batch_infected)
+                align_signal_width(2, std::stof(se->getString()))
         ));
 
     }
@@ -272,6 +275,7 @@ void plague::mul_pop_inf(SST::Event *ev) {
 void plague::rng_pop_inf(SST::Event *ev) {
 
     auto *se = dynamic_cast<SST::Interfaces::StringEvent *>(ev);
+
     if (se && m_cycle < LOOPEND) {
 
         m_batch_infected = std::stoi(se->getString()) * m_cycle / std::stoi(m_limit) + 1;
@@ -291,11 +295,34 @@ void plague::floor_pop_inf(SST::Event *ev) {
     if (se && m_cycle < LOOPEND - 2) {
 
         m_total_infected_today = std::stoi(se->getString());
+        std::string m_total_infected_today_str = se->getString();
+        align_signal_width('0', 4, m_total_infected_today_str);
+
+        mul_pop_dead_din_link->send(new SST::Interfaces::StringEvent(
+                std::to_string(_keep_send) +
+                std::to_string(_keep_recv) +
+                m_total_infected_today_str +
+                align_signal_width(10, m_fatality)
+        ));
+
+    }
+
+    delete se;
+
+}
+
+void plague::mul_pop_dead(SST::Event *ev) {
+
+    auto *se = dynamic_cast<SST::Interfaces::StringEvent *>(ev);
+    bool _keep_send = m_cycle < SIMTIME - 4;
+    bool _keep_recv = m_cycle < SIMTIME - 5;
+
+    if (se && m_cycle < LOOPEND - 1) {
 
         floor_pop_dead_din_link->send(new SST::Interfaces::StringEvent(
                 std::to_string(_keep_send) +
                 std::to_string(_keep_recv) +
-                align_signal_width(2, m_total_infected_today * m_fatality)
+                align_signal_width(2, std::stof(se->getString()))
         ));
 
     }
