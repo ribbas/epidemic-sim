@@ -9,7 +9,7 @@ plague::plague(SST::ComponentId_t id, SST::Params &params) :
         SST::Component(id),
         // Collect all the parameters from the project driver
         m_clock(params.find<std::string>("CLOCK", "1Hz")),
-        seed_lim(params.find<std::string>("SEED", "12345")),
+        seed_lim(params.find<std::string>("SEED", "00000")),
         m_rng(new SST::RNG::MersenneRNG(std::stoi(seed_lim))),
         // initialize ram links
         flash_mem_din_link(configureLink("flash_mem_din")),
@@ -113,7 +113,7 @@ plague::plague(SST::ComponentId_t id, SST::Params &params) :
                 "min_inf_dout",
                 new SST::Event::Handler<plague>(this, &plague::min_inf))
         ),
-        m_cure_threshold(0), m_batch_infected(0), m_total_infected(0), m_total_dead(0), m_total_infected_today(0),
+        m_cure_threshold(0), m_batch_infected(0), m_total_infected(0), m_total_infected_today(0),
         m_total_dead_today(0), m_gene(0),
         m_severity(0.0), m_infectivity(0.0), m_fatality(0.0), m_birth_rate(0.0), m_cure(0.0), m_research(0.0) {
 
@@ -155,8 +155,7 @@ void plague::finish() {
 
 void plague::get_seed(std::string &seed) {
 
-    unsigned int _rand_int = m_rng->generateNextUInt32();
-    seed = std::to_string((_rand_int & 0x0000FFFF) ^ ((_rand_int & 0xFFFF0000) >> 16));
+    seed = std::to_string((uint16_t) m_rng->generateNextUInt32());
     align_signal_width('0', 5, seed);
 
 }
@@ -178,10 +177,10 @@ void plague::append_signal(const char chr, int width, std::string &signal) {
 std::string plague::align_signal_width(int width, float signal) {
     std::ostringstream _data_out;
     _data_out << std::fixed << std::setprecision(width) << signal;
-    return _data_out.str();
+    return _data_out.str().substr(0, width);
 }
 
-bool less_than(float a, float b) {
+bool float_less_than(float a, float b) {
     return (b - a) > ((fabs(a) < fabs(b) ? fabs(b) : fabs(a)) * std::numeric_limits<float>::epsilon());
 }
 

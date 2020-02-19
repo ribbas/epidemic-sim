@@ -1,15 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import datetime
 import json
 import sys
-from datetime import datetime
 
 import plotly.graph_objs as go
 
 if __name__ == "__main__":
-
-    data = {}
     with open(sys.argv[-1]) as stats_dump_file:
         data = json.load(stats_dump_file)
 
@@ -25,17 +23,21 @@ if __name__ == "__main__":
             line={"color": "rgb(255,0,0)"}, mode="lines+markers"
         ))
         fig.update_layout(barmode="stack")
-        fig.add_shape(
-                # Line Vertical
-                dict(
-                    type="line",
-                    x0=datetime.strptime(data["cure_started_date"], "%Y-%m-%d"),
-                    y0=0,
-                    x1=datetime.strptime(data["cure_started_date"], "%Y-%m-%d"),
-                    y1=data["plot_data"]["inf_total"][-1],
-                    line=dict(
-                        color="RoyalBlue",
-                        width=3
-                    )
+
+        cure_started_date = datetime.datetime.strptime(data["cure_started_date"], "%Y-%m-%d")
+        cure_started_date_val = data["plot_data"]["inf_total"][-1]
+        fig.add_trace(go.Scatter(
+            x=[cure_started_date + datetime.timedelta(80)],
+            y=[cure_started_date_val],
+            text=["Cure started"],
+            mode="text",
         ))
+        fig.add_shape({
+            "type": "line",
+            "x0": cure_started_date,
+            "y0": 0,
+            "x1": cure_started_date,
+            "y1": cure_started_date_val,
+            "line": {"color": "rgb(97,212,179)"}
+        })
         fig.show()

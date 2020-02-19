@@ -145,7 +145,7 @@ private:
     unsigned int LOOPEND = (SIMTIME - 2);
     bool m_keep_send{}, m_keep_recv{};
 
-    unsigned int m_cure_threshold{}, m_batch_infected{}, m_total_infected{}, m_total_dead{}, m_total_infected_today{}, m_total_dead_today{}, m_gene{};
+    unsigned int m_cure_threshold{}, m_batch_infected{}, m_total_infected{}, m_total_infected_today{}, m_total_dead_today{}, m_gene{};
     float m_severity{}, m_infectivity{}, m_fatality{}, m_birth_rate{}, m_cure{}, m_research{};
     std::string m_limit, m_mutation = "0";
     bool m_mutate_lock = false, m_loop_lock = true, m_mem_read_flag = false;

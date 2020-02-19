@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import os
 from random import SystemRandom
 from string import ascii_uppercase, digits
-import os
 
 import sst
 
@@ -26,7 +26,7 @@ plague_main = sst.Component(
     "Plague Simulation Driver", "plague.plague")
 plague_main.addParams({
     "CLOCK": CLOCK,
-    "SEED": "15364",
+    "SEED": "00001",
 })
 
 # SystemC components
