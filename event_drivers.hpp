@@ -64,7 +64,7 @@ void plague::rng_limit(SST::Event *ev) {
                 std::to_string(m_keep_recv) +
                 "1" +
                 seed_sev +
-                "020" +
+                "100" +
                 m_limit +
                 std::to_string(m_cycle)
         ));
@@ -74,7 +74,7 @@ void plague::rng_limit(SST::Event *ev) {
                 std::to_string(m_keep_recv) +
                 "1" +
                 seed_birth_rate +
-                "020" +
+                "100" +
                 m_limit +
                 std::to_string(m_cycle)
         ));

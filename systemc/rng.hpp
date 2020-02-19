@@ -10,18 +10,18 @@ SC_MODULE(rng) {
     sc_in<sc_uint<10> > upper_limit;
     sc_out<sc_uint<10> > data_out;
 
-    std::mt19937 generator;  // standard mersenne_twister_engine
+    std::mt19937 _gen;  // standard mersenne_twister_engine
 
     /* initialize random seed: */
     void new_seed() {
-        generator.seed((unsigned int) seed.read());
+        _gen.seed((unsigned int) seed.read());
     }
 
     void generate() {
-        std::uniform_int_distribution<unsigned int> distr(lower_limit.read(), upper_limit.read());
+        std::uniform_int_distribution<unsigned int> _distr(lower_limit.read(), upper_limit.read());
 
         if ((lower_limit.read() < upper_limit.read()) && en.read()) {
-            data_out.write(distr(generator));
+            data_out.write(_distr(_gen));
         }
     }
 
