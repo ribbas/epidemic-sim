@@ -2,19 +2,15 @@
 #define PLAGUE_SETUP_HPP
 
 #include "plague.hpp"
+#include <math.h>
+#include <limits>
 
 plague::plague(SST::ComponentId_t id, SST::Params &params) :
         SST::Component(id),
         // Collect all the parameters from the project driver
         m_clock(params.find<std::string>("CLOCK", "1Hz")),
-        seed_lim(params.find<std::string>("SEED0", "12345")),
-        seed_sev(params.find<std::string>("SEED1", "12346")),
-        seed_birth_rate(params.find<std::string>("SEED2", "12347")),
-        seed_let(params.find<std::string>("SEED3", "12348")),
-        seed_inf(params.find<std::string>("SEED4", "12349")),
-        seed_pop_inf(params.find<std::string>("SEED5", "12351")),
-        seed_research(params.find<std::string>("SEED6", "12352")),
-        seed_mutation(params.find<std::string>("SEED7", "12353")),
+        seed_lim(params.find<std::string>("SEED", "12345")),
+        m_rng(new SST::RNG::MersenneRNG(std::stoi(seed_lim))),
         // initialize ram links
         flash_mem_din_link(configureLink("flash_mem_din")),
         flash_mem_dout_link(configureLink(
@@ -123,21 +119,46 @@ plague::plague(SST::ComponentId_t id, SST::Params &params) :
 
     m_output.init("\033[93mplague-" + getName() + "\033[0m -> ", 1, 0, SST::Output::STDOUT);
 
+    if (std::stoi(seed_lim) > 65535) {
+        m_output.fatal(CALL_INFO, -1, "16-bit seed integer overflow\n");
+    } else if (seed_lim.length() != 5) {
+        m_output.fatal(CALL_INFO, -1, "Seed integer string must have a length of 5\n");
+    }
+
     // Just register a plain clock for this simple example
     registerClock(m_clock, new SST::Clock::Handler<plague>(this, &plague::tick));
+
     registerAsPrimaryComponent();
     primaryComponentDoNotEndSim();
+
 }
 
 void plague::setup() {
 
     m_output.verbose(CALL_INFO, 1, 0, "Component is being set up.\n");
+    get_seed(seed_sev);
+    get_seed(seed_birth_rate);
+    get_seed(seed_let);
+    get_seed(seed_inf);
+    get_seed(seed_pop_inf);
+    get_seed(seed_research);
+    get_seed(seed_mutation);
+
 }
 
 void plague::finish() {
 
     m_output.verbose(CALL_INFO, 1, 0, "Destroying %s...\n", getName().c_str());
     std::fclose(m_fp);
+
+}
+
+void plague::get_seed(std::string &seed) {
+
+    unsigned int _rand_int = m_rng->generateNextUInt32();
+    seed = std::to_string((_rand_int & 0x0000FFFF) ^ ((_rand_int & 0xFFFF0000) >> 16));
+    align_signal_width('0', 5, seed);
+
 }
 
 void plague::align_signal_width(const char chr, int width, std::string &signal) {
@@ -158,6 +179,10 @@ std::string plague::align_signal_width(int width, float signal) {
     std::ostringstream _data_out;
     _data_out << std::fixed << std::setprecision(width) << signal;
     return _data_out.str();
+}
+
+bool less_than(float a, float b) {
+    return (b - a) > ((fabs(a) < fabs(b) ? fabs(b) : fabs(a)) * std::numeric_limits<float>::epsilon());
 }
 
 #endif

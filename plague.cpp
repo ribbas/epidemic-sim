@@ -14,7 +14,7 @@ bool plague::tick(SST::Cycle_t current_cycle) {
     if (m_mem_read_flag) {
 
         ram_addr = std::to_string(current_cycle % (SIMTIME / 2));
-        align_signal_width('0', 8, ram_addr);
+        align_signal_width('0', 6, ram_addr);
         flash_mem_din_link->send(new SST::Interfaces::StringEvent(
                 std::to_string(m_keep_send) +
                 std::to_string(m_keep_recv) +
@@ -49,7 +49,7 @@ bool plague::tick(SST::Cycle_t current_cycle) {
                     std::to_string(m_keep_send) +
                     std::to_string(m_keep_recv) +
                     std::to_string(m_fatality).back() +
-                            m_mutation
+                    m_mutation
             ));
 
             m_cure += m_research;
@@ -67,7 +67,7 @@ bool plague::tick(SST::Cycle_t current_cycle) {
                     std::to_string(m_keep_recv) +
                     "1" +
                     seed_lim +
-                    "0209999" +
+                    "1001023" +
                     current_cycle_str
             ));
 
@@ -78,7 +78,7 @@ bool plague::tick(SST::Cycle_t current_cycle) {
             floor_cure_thresh_din_link->send(new SST::Interfaces::StringEvent(
                     std::to_string(m_keep_send) +
                     std::to_string(m_keep_recv) +
-                    align_signal_width(8, m_severity * m_birth_rate * POPULATION_TOTAL)
+                    align_signal_width(5, m_severity * m_birth_rate * POPULATION_TOTAL)
             ));
 
         }
@@ -157,7 +157,7 @@ bool plague::tick(SST::Cycle_t current_cycle) {
             floor_cure_thresh_din_link->send(new SST::Interfaces::StringEvent(
                     std::to_string(m_keep_send) +
                     std::to_string(m_keep_recv) +
-                    "0.00"
+                    "0.0000000000"
             ));
 
             randf_fat_din_link->send(new SST::Interfaces::StringEvent(
@@ -212,8 +212,9 @@ bool plague::tick(SST::Cycle_t current_cycle) {
         m_total_infected += m_total_infected_today;
         m_total_dead += m_total_dead_today;
 
-        if (m_cure > 100.00 && m_loop_lock) {
+        if (less_than(100.00, m_cure) && m_loop_lock) {
 
+            std::cout << "ENDING " << m_cure << '\n';
             SIMTIME = current_cycle + 6;
             LOOPEND = (SIMTIME - 2);
             m_loop_lock = false;
@@ -222,7 +223,7 @@ bool plague::tick(SST::Cycle_t current_cycle) {
             append_signal('0', 7, ram_data);
             ram_data = "0" + ram_data;
             ram_addr = std::to_string(current_cycle);
-            align_signal_width('0', 8, ram_addr);
+            align_signal_width('0', 6, ram_addr);
             flash_mem_din_link->send(new SST::Interfaces::StringEvent(
                     std::to_string(m_keep_send) +
                     std::to_string(m_keep_recv) +
@@ -235,7 +236,7 @@ bool plague::tick(SST::Cycle_t current_cycle) {
             append_signal('0', 7, ram_data);
             ram_data = "0" + ram_data;
             ram_addr = std::to_string(current_cycle + 1);
-            align_signal_width('0', 8, ram_addr);
+            align_signal_width('0', 6, ram_addr);
             flash_mem_din_link->send(new SST::Interfaces::StringEvent(
                     std::to_string(m_keep_send) +
                     std::to_string(m_keep_recv) +
@@ -248,7 +249,7 @@ bool plague::tick(SST::Cycle_t current_cycle) {
             append_signal('0', 7, ram_data);
             ram_data = "0" + ram_data;
             ram_addr = std::to_string(current_cycle + 2);
-            align_signal_width('0', 8, ram_addr);
+            align_signal_width('0', 6, ram_addr);
             flash_mem_din_link->send(new SST::Interfaces::StringEvent(
                     std::to_string(m_keep_send) +
                     std::to_string(m_keep_recv) +
@@ -261,7 +262,7 @@ bool plague::tick(SST::Cycle_t current_cycle) {
             append_signal('0', 7, ram_data);
             ram_data = "0" + ram_data;
             ram_addr = std::to_string(current_cycle + 3);
-            align_signal_width('0', 8, ram_addr);
+            align_signal_width('0', 6, ram_addr);
             flash_mem_din_link->send(new SST::Interfaces::StringEvent(
                     std::to_string(m_keep_send) +
                     std::to_string(m_keep_recv) +
@@ -273,7 +274,7 @@ bool plague::tick(SST::Cycle_t current_cycle) {
             ram_data = std::to_string(m_cure_threshold);
             align_signal_width('0', 8, ram_data);
             ram_addr = std::to_string(current_cycle + 4);
-            align_signal_width('0', 8, ram_addr);
+            align_signal_width('0', 6, ram_addr);
             flash_mem_din_link->send(new SST::Interfaces::StringEvent(
                     std::to_string(m_keep_send) +
                     std::to_string(m_keep_recv) +
@@ -288,8 +289,9 @@ bool plague::tick(SST::Cycle_t current_cycle) {
             m_output.verbose(CALL_INFO, 1, 0, "Birth rate: %f\n", m_birth_rate);
             m_output.verbose(CALL_INFO, 1, 0, "Cure threshold: %d\n", m_cure_threshold);
 
-        } else if (m_cure < 100.00) {
+        } else if (less_than(m_cure, 100.00)) {
 
+            // std::cout << "NOPE " << m_cure << '\n';
             m_output.verbose(CALL_INFO, 1, 0, " %6lu | %6.2f | %8d | %8d\n", current_cycle,
                              m_cure, m_total_infected_today, m_total_dead_today);
 
@@ -301,7 +303,7 @@ bool plague::tick(SST::Cycle_t current_cycle) {
             align_signal_width('0', 2, _cure);
             ram_data = _pop_inf + _pop_dead + _cure;
             ram_addr = current_cycle_str;
-            align_signal_width('0', 8, ram_addr);
+            align_signal_width('0', 6, ram_addr);
 
             flash_mem_din_link->send(new SST::Interfaces::StringEvent(
                     std::to_string(m_keep_send) +

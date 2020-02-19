@@ -4,7 +4,7 @@ import chisel3._
 
 class flash_mem extends Module {
     val DATAW: Int = 25
-    val ADDRW: Int = 25
+    val ADDRW: Int = 17
     val FLASHD: Int = 1 << DATAW
     val io = IO(new Bundle {
         val address  = Input(UInt(ADDRW.W))

@@ -45,6 +45,7 @@ if __name__ == "__main__":
             pop_inf, pop_dead, cure = int(data[0:3]), int(data[3:6]), int(data[6:8])
             if not stats["cure_started_day"] and cure:
                 stats["cure_started_day"] = int(addr)
+                stats["cure_started_date"] = (today + datetime.timedelta(stats["cure_started_day"])).isoformat()
 
             if not stats_dump and cure == 99:
                 stats_dump = True
@@ -84,6 +85,6 @@ if __name__ == "__main__":
         stats["total_dead"] = total_dead
         stats["days"] = int(addr) - 5
 
-    print(f"Cure started on {today + datetime.timedelta(stats['cure_started_day'])}")
+    print(f"Cure started on {stats['cure_started_date']}")
     with open("data.json", "w") as stats_dump_file:
         json.dump(stats, stats_dump_file)

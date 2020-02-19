@@ -1,4 +1,4 @@
-#include <stdlib.h>
+#include <random>
 
 #include <systemc.h>
 
@@ -10,14 +10,19 @@ SC_MODULE(rng) {
     sc_in<sc_uint<10> > upper_limit;
     sc_out<sc_uint<10> > data_out;
 
+    std::mt19937 generator;  // standard mersenne_twister_engine
+
     /* initialize random seed: */
     void new_seed() {
-        srand(seed.read());
+        generator.seed((unsigned int) seed.read());
     }
 
     void generate() {
+
+        std::uniform_int_distribution<unsigned int> distr(lower_limit.read(), upper_limit.read());
+
         if ((lower_limit.read() < upper_limit.read()) && en.read()) {
-            data_out.write(rand() % upper_limit.read() + lower_limit.read());
+            data_out.write(distr(generator));
         }
     }
 

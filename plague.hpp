@@ -4,6 +4,7 @@
 #include <sst/core/component.h>
 #include <sst/core/interfaces/stringEvent.h>
 #include <sst/core/link.h>
+#include <sst/core/rng/mersenne.h>
 
 #define POPULATION_TOTAL 7760000000
 
@@ -18,6 +19,8 @@ public:
     void finish() override;
 
     bool tick(SST::Cycle_t);
+
+    void get_seed(std::string &);
 
     static void align_signal_width(char, int, std::string &);
 
@@ -115,6 +118,7 @@ private:
     std::string m_clock;
     std::string seed_lim, seed_sev, seed_birth_rate, seed_let, seed_inf,
             seed_pop_inf, seed_research, seed_mutation;
+    SST::RNG::MersenneRNG *m_rng;
 
     // SST links and variables
     SST::Output m_output;

@@ -15,7 +15,7 @@ void plague::flash_mem(SST::Event *ev) {
         align_signal_width('0', 8, m_mem_data_out);
 
         std::string ram_addr = std::to_string(m_cycle % (SIMTIME / 2));
-        align_signal_width('0', 8, ram_addr);
+        align_signal_width('0', 6, ram_addr);
         fprintf(m_fp, "%s %s\n", ram_addr.c_str(), m_mem_data_out.c_str());
 
     }
@@ -58,6 +58,7 @@ void plague::rng_limit(SST::Event *ev) {
 
         m_limit = se->getString();
         align_signal_width('0', 4, m_limit);
+        std::cout << m_cycle << " LIM " << m_limit << '\n';
 
         randf_sev_din_link->send(new SST::Interfaces::StringEvent(
                 std::to_string(m_keep_send) +
@@ -117,7 +118,7 @@ void plague::randf_sev(SST::Event *ev) {
     if (se && m_keep_recv) {
 
         m_severity = std::stof(se->getString());
-
+        std::cout << m_cycle << " m_severity " << m_severity << '\n';
     }
 
     delete se;
@@ -130,7 +131,7 @@ void plague::randf_br(SST::Event *ev) {
     if (se && m_keep_recv) {
 
         m_birth_rate = std::stof(se->getString());
-
+        std::cout << m_cycle << " m_birth_rate " << m_birth_rate << '\n';
     }
 
     delete se;
@@ -144,6 +145,12 @@ void plague::floor_cure_thresh(SST::Event *ev) {
     if (se && m_keep_recv) {
 
         m_cure_threshold = std::stoi(se->getString()) / std::stoi(m_limit);
+        std::cout << m_cycle << " m_severity " << m_severity << '\n';
+        std::cout << m_cycle << " m_birth_rate " << m_birth_rate << '\n';
+        std::cout << m_cycle << " pop " << POPULATION_TOTAL << '\n';
+        std::cout << m_cycle << " shouild be " << m_severity * m_birth_rate * POPULATION_TOTAL << '\n';
+        std::cout << m_cycle << " CURE THRESH " << std::stoi(se->getString()) << ' ' << std::stoi(m_limit) <<
+        ' ' << std::stoi(se->getString()) / std::stoi(m_limit) << '\n';
 
     }
 

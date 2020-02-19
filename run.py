@@ -26,7 +26,7 @@ plague_main = sst.Component(
     "Plague Simulation Driver", "plague.plague")
 plague_main.addParams({
     "CLOCK": CLOCK,
-    "SEED0": "15462",
+    "SEED": "15364",
 })
 
 # SystemC components
