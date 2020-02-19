@@ -7,7 +7,6 @@ SC_MODULE(sc_floor) {
     sc_out<sc_uint<25> > data_out;
 
     void do_floor() {
-        // std::cout << "FLOORING " << getpid() << ' ' << operand.read() << " to " << floor(operand.read()) << '\n';
         data_out.write(floor(operand.read()));
     }
 

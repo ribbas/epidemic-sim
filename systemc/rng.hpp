@@ -18,7 +18,6 @@ SC_MODULE(rng) {
     }
 
     void generate() {
-
         std::uniform_int_distribution<unsigned int> distr(lower_limit.read(), upper_limit.read());
 
         if ((lower_limit.read() < upper_limit.read()) && en.read()) {
