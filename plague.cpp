@@ -1,6 +1,6 @@
 #include "plague.hpp"
-#include "setup.hpp"
 #include "event_drivers.hpp"
+#include "setup.hpp"
 
 bool plague::tick(SST::Cycle_t current_cycle) {
 
@@ -14,7 +14,7 @@ bool plague::tick(SST::Cycle_t current_cycle) {
     if (m_mem_read_flag) {
 
         ram_addr = std::to_string(current_cycle % (SIMTIME / 2));
-        align_signal_width('0', 6, ram_addr);
+        align_signal_width(6, ram_addr);
         flash_mem_din_link->send(new SST::Interfaces::StringEvent(
                 std::to_string(m_keep_send) +
                 std::to_string(m_keep_recv) +
@@ -30,7 +30,7 @@ bool plague::tick(SST::Cycle_t current_cycle) {
             // random int between 2 and 100
             m_dis.param(std::uniform_int_distribution<unsigned int>::param_type(2, 100));
             rand_int_str = std::to_string(m_dis(m_gen));
-            align_signal_width('0', 4, rand_int_str);
+            align_signal_width(4, rand_int_str);
 
             mul_inv_rsrch_din_link->send(new SST::Interfaces::StringEvent(
                     std::to_string(m_keep_send) +
@@ -67,7 +67,7 @@ bool plague::tick(SST::Cycle_t current_cycle) {
             // random int between 100 and m_limit
             m_dis.param(std::uniform_int_distribution<unsigned int>::param_type(100, m_limit));
             rand_int_str = std::to_string(m_dis(m_gen));
-            align_signal_width('0', 4, rand_int_str);
+            align_signal_width(4, rand_int_str);
             mul_inv_sev_din_link->send(new SST::Interfaces::StringEvent(
                     std::to_string(m_keep_send) +
                     std::to_string(m_keep_recv) +
@@ -77,7 +77,7 @@ bool plague::tick(SST::Cycle_t current_cycle) {
             // random int between 100 and m_limit
             m_dis.param(std::uniform_int_distribution<unsigned int>::param_type(100, m_limit));
             rand_int_str = std::to_string(m_dis(m_gen));
-            align_signal_width('0', 4, rand_int_str);
+            align_signal_width(4, rand_int_str);
             mul_inv_br_din_link->send(new SST::Interfaces::StringEvent(
                     std::to_string(m_keep_send) +
                     std::to_string(m_keep_recv) +
@@ -101,7 +101,7 @@ bool plague::tick(SST::Cycle_t current_cycle) {
             // random int between 100 and m_limit
             m_dis.param(std::uniform_int_distribution<unsigned int>::param_type(100, m_limit));
             rand_int_str = std::to_string(m_dis(m_gen));
-            align_signal_width('0', 4, rand_int_str);
+            align_signal_width(4, rand_int_str);
             mul_inv_fat_din_link->send(new SST::Interfaces::StringEvent(
                     std::to_string(m_keep_send) +
                     std::to_string(m_keep_recv) +
@@ -111,7 +111,7 @@ bool plague::tick(SST::Cycle_t current_cycle) {
             // random int between 100 and m_limit
             m_dis.param(std::uniform_int_distribution<unsigned int>::param_type(100, m_limit));
             rand_int_str = std::to_string(m_dis(m_gen));
-            align_signal_width('0', 4, rand_int_str);
+            align_signal_width(4, rand_int_str);
             mul_inv_inf_din_link->send(new SST::Interfaces::StringEvent(
                     std::to_string(m_keep_send) +
                     std::to_string(m_keep_recv) +
@@ -186,7 +186,7 @@ bool plague::tick(SST::Cycle_t current_cycle) {
             append_signal('0', 7, ram_data);
             ram_data = "0" + ram_data;
             ram_addr = std::to_string(current_cycle);
-            align_signal_width('0', 6, ram_addr);
+            align_signal_width(6, ram_addr);
             flash_mem_din_link->send(new SST::Interfaces::StringEvent(
                     std::to_string(m_keep_send) +
                     std::to_string(m_keep_recv) +
@@ -199,7 +199,7 @@ bool plague::tick(SST::Cycle_t current_cycle) {
             append_signal('0', 7, ram_data);
             ram_data = "0" + ram_data;
             ram_addr = std::to_string(current_cycle + 1);
-            align_signal_width('0', 6, ram_addr);
+            align_signal_width(6, ram_addr);
             flash_mem_din_link->send(new SST::Interfaces::StringEvent(
                     std::to_string(m_keep_send) +
                     std::to_string(m_keep_recv) +
@@ -212,7 +212,7 @@ bool plague::tick(SST::Cycle_t current_cycle) {
             append_signal('0', 7, ram_data);
             ram_data = "0" + ram_data;
             ram_addr = std::to_string(current_cycle + 2);
-            align_signal_width('0', 6, ram_addr);
+            align_signal_width(6, ram_addr);
             flash_mem_din_link->send(new SST::Interfaces::StringEvent(
                     std::to_string(m_keep_send) +
                     std::to_string(m_keep_recv) +
@@ -225,7 +225,7 @@ bool plague::tick(SST::Cycle_t current_cycle) {
             append_signal('0', 7, ram_data);
             ram_data = "0" + ram_data;
             ram_addr = std::to_string(current_cycle + 3);
-            align_signal_width('0', 6, ram_addr);
+            align_signal_width(6, ram_addr);
             flash_mem_din_link->send(new SST::Interfaces::StringEvent(
                     std::to_string(m_keep_send) +
                     std::to_string(m_keep_recv) +
@@ -235,9 +235,9 @@ bool plague::tick(SST::Cycle_t current_cycle) {
             ));
 
             ram_data = std::to_string(m_cure_threshold);
-            align_signal_width('0', 8, ram_data);
+            align_signal_width(8, ram_data);
             ram_addr = std::to_string(current_cycle + 4);
-            align_signal_width('0', 6, ram_addr);
+            align_signal_width(6, ram_addr);
             flash_mem_din_link->send(new SST::Interfaces::StringEvent(
                     std::to_string(m_keep_send) +
                     std::to_string(m_keep_recv) +
@@ -260,12 +260,12 @@ bool plague::tick(SST::Cycle_t current_cycle) {
             std::string _pop_inf = std::to_string(m_total_infected_today);
             std::string _pop_dead = std::to_string(m_total_dead_today);
             std::string _cure = std::to_string((unsigned int) m_cure);
-            align_signal_width('0', 3, _pop_inf);
-            align_signal_width('0', 3, _pop_dead);
-            align_signal_width('0', 2, _cure);
+            align_signal_width(3, _pop_inf);
+            align_signal_width(3, _pop_dead);
+            align_signal_width(2, _cure);
             ram_data = _pop_inf + _pop_dead + _cure;
             ram_addr = current_cycle_str;
-            align_signal_width('0', 6, ram_addr);
+            align_signal_width(6, ram_addr);
 
             flash_mem_din_link->send(new SST::Interfaces::StringEvent(
                     std::to_string(m_keep_send) +

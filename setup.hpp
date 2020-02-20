@@ -1,9 +1,10 @@
 #ifndef PLAGUE_SETUP_HPP
 #define PLAGUE_SETUP_HPP
 
-#include "plague.hpp"
 #include <cmath>
 #include <limits>
+
+#include "plague.hpp"
 
 plague::plague(SST::ComponentId_t id, SST::Params &params) :
         SST::Component(id),
@@ -23,7 +24,7 @@ plague::plague(SST::ComponentId_t id, SST::Params &params) :
                 "mutation_dout",
                 new SST::Event::Handler<plague>(this, &plague::mutation))
         ),
-         // initialize mutation RNG links
+        // initialize mutation RNG links
         mul_inv_sev_din_link(configureLink("mul_inv_sev_din")),
         mul_inv_sev_dout_link(configureLink(
                 "mul_inv_sev_dout",
@@ -122,10 +123,10 @@ void plague::finish() {
 
 }
 
-void plague::align_signal_width(const char chr, int width, std::string &signal) {
+void plague::align_signal_width(int width, std::string &signal) {
     int _len = signal.length();
     if (_len < width) {
-        signal = std::string(width - _len, chr).append(signal);
+        signal = std::string(width - _len, '0') + signal;
     }
 }
 
@@ -143,7 +144,8 @@ std::string plague::align_signal_width(int width, float signal) {
 }
 
 bool float_less_than(float a, float b) {
-    return (b - a) > ((std::fabs(a) < std::fabs(b) ? std::fabs(b) : std::fabs(a)) * std::numeric_limits<float>::epsilon());
+    return (b - a) >
+           ((std::fabs(a) < std::fabs(b) ? std::fabs(b) : std::fabs(a)) * std::numeric_limits<float>::epsilon());
 }
 
 #endif

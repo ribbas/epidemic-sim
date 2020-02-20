@@ -4,18 +4,16 @@
 #include "plague.hpp"
 #include "setup.hpp"
 
-#include <iomanip>
-
 void plague::flash_mem(SST::Event *ev) {
 
     auto *se = dynamic_cast<SST::Interfaces::StringEvent *>(ev);
     if (se && m_mem_read_flag) {
 
         m_mem_data_out = se->getString();
-        align_signal_width('0', 8, m_mem_data_out);
+        align_signal_width(8, m_mem_data_out);
 
         std::string ram_addr = std::to_string(m_cycle % (SIMTIME / 2));
-        align_signal_width('0', 6, ram_addr);
+        align_signal_width(6, ram_addr);
         fprintf(m_fp, "%s %s\n", ram_addr.c_str(), m_mem_data_out.c_str());
 
     }
@@ -186,7 +184,7 @@ void plague::min_inf(SST::Event *ev) {
         }
 
         std::string batch_inf_str = std::to_string(m_batch_infected);
-        align_signal_width('0', 4, batch_inf_str);
+        align_signal_width(4, batch_inf_str);
 
         mul_pop_inf_din_link->send(new SST::Interfaces::StringEvent(
                 std::to_string(_keep_send) +
@@ -231,7 +229,7 @@ void plague::floor_pop_inf(SST::Event *ev) {
 
         m_total_infected_today = std::stoi(se->getString());
         std::string m_total_infected_today_str = se->getString();
-        align_signal_width('0', 4, m_total_infected_today_str);
+        align_signal_width(4, m_total_infected_today_str);
 
         mul_pop_dead_din_link->send(new SST::Interfaces::StringEvent(
                 std::to_string(_keep_send) +

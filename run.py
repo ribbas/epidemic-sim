@@ -26,7 +26,7 @@ plague_main = sst.Component(
     "Plague Simulation Driver", "plague.plague")
 plague_main.addParams({
     "CLOCK": CLOCK,
-    "SEED": 2,
+    "SEED": 1023,
 })
 
 
@@ -98,7 +98,7 @@ floor_pop_dead_comp.addParams({
     "ipc_port": get_rand_tmp(),
 })
 
-# mulonential components
+# Multiplication components
 mul_pop_inf_comp = sst.Component(
     "Population Infected Multiplication Component (SystemC)", "plague.sc_mul")
 mul_pop_inf_comp.addParams({

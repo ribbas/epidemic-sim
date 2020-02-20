@@ -1,12 +1,11 @@
 #ifndef PLAGUE_HPP
 #define PLAGUE_HPP
 
+#include <random>
+
 #include <sst/core/component.h>
 #include <sst/core/interfaces/stringEvent.h>
 #include <sst/core/link.h>
-#include <sst/core/rng/mersenne.h>
-
-#include <random>
 
 #define POPULATION_TOTAL 7760000000
 
@@ -22,7 +21,7 @@ public:
 
     bool tick(SST::Cycle_t);
 
-    static void align_signal_width(char, int, std::string &);
+    static void align_signal_width(int, std::string &);
 
     static void append_signal(char, int, std::string &);
 
