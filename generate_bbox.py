@@ -47,11 +47,10 @@ if __name__ == "__main__":
             module="mul_inv",
         )
         mul_inv.set_ports((
-            ("clock", "clock", "<bool>", 5),
             ("input", "operand", "<sc_uint<10>>"),
             ("output", "data_out", "<float>", 12),
         ))
-        mul_inv.fixed_width_float_output(8)
+        mul_inv.fixed_width_float_output(9)
         mul_inv.disable_runtime_warnings(["SC_ID_NO_SC_START_ACTIVITY_"])
         mul_inv.generate_bbox()
 

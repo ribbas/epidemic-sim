@@ -93,6 +93,17 @@ void plague::mul_inv_sev(SST::Event *ev) {
 
 }
 
+void plague::mul_inv_br(SST::Event *ev) {
+
+    auto *se = dynamic_cast<SST::Interfaces::StringEvent *>(ev);
+    if (se && m_keep_recv) {
+        m_birth_rate = std::stof(se->getString());
+    }
+
+    delete se;
+
+}
+
 void plague::mul_inv_rsrch(SST::Event *ev) {
 
     auto *se = dynamic_cast<SST::Interfaces::StringEvent *>(ev);
@@ -100,17 +111,6 @@ void plague::mul_inv_rsrch(SST::Event *ev) {
 
         m_research = std::stof(se->getString());
 
-    }
-
-    delete se;
-
-}
-
-void plague::mul_inv_br(SST::Event *ev) {
-
-    auto *se = dynamic_cast<SST::Interfaces::StringEvent *>(ev);
-    if (se && m_keep_recv) {
-        m_birth_rate = std::stof(se->getString());
     }
 
     delete se;
