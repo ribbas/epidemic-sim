@@ -26,25 +26,8 @@ plague_main = sst.Component(
     "Plague Simulation Driver", "plague.plague")
 plague_main.addParams({
     "CLOCK": CLOCK,
-    "SEED": "00001",
+    "SEED": "00000",
 })
-
-mul_inv_sev_comp = sst.Component(
-    "Severity Multiplicative Inverse Component (SystemC)", "plague.mul_inv")
-mul_inv_sev_comp.addParams({
-    "clock": CLOCK,
-    "proc": os.path.join(BASE_PATH, "mul_inv.o"),
-    "ipc_port": get_rand_tmp(),
-})
-
-mul_inv_inf_comp = sst.Component(
-    "Infectivity Multiplicative Inverse Component (SystemC)", "plague.mul_inv")
-mul_inv_inf_comp.addParams({
-    "clock": CLOCK,
-    "proc": os.path.join(BASE_PATH, "mul_inv.o"),
-    "ipc_port": get_rand_tmp(),
-})
-
 
 
 # SystemC components
@@ -74,44 +57,44 @@ rng_mut_comp.addParams({
     "ipc_port": get_rand_tmp(),
 })
 
-# Random Float components
-# randf_sev_comp = sst.Component(
-#     "Severity Component (SystemC)", "plague.randf")
-# randf_sev_comp.addParams({
-#     "clock": CLOCK,
-#     "proc": os.path.join(BASE_PATH, "randf.o"),
-#     "ipc_port": get_rand_tmp(),
-# })
-
-# randf_inf_comp = sst.Component(
-#     "Infectivity Component (SystemC)", "plague.randf")
-# randf_inf_comp.addParams({
-#     "clock": CLOCK,
-#     "proc": os.path.join(BASE_PATH, "randf.o"),
-#     "ipc_port": get_rand_tmp(),
-# })
-
-randf_fat_comp = sst.Component(
-    "Fatality Component (SystemC)", "plague.randf")
-randf_fat_comp.addParams({
+# Multiplicative inverse components
+mul_inv_sev_comp = sst.Component(
+    "Severity Multiplicative Inverse Component (SystemC)", "plague.mul_inv")
+mul_inv_sev_comp.addParams({
     "clock": CLOCK,
-    "proc": os.path.join(BASE_PATH, "randf.o"),
+    "proc": os.path.join(BASE_PATH, "mul_inv.o"),
     "ipc_port": get_rand_tmp(),
 })
 
-randf_br_comp = sst.Component(
-    "Birth Rate Component (SystemC)", "plague.randf")
-randf_br_comp.addParams({
+mul_inv_inf_comp = sst.Component(
+    "Infectivity Multiplicative Inverse Component (SystemC)", "plague.mul_inv")
+mul_inv_inf_comp.addParams({
     "clock": CLOCK,
-    "proc": os.path.join(BASE_PATH, "randf.o"),
+    "proc": os.path.join(BASE_PATH, "mul_inv.o"),
     "ipc_port": get_rand_tmp(),
 })
 
-randf_rsrch_comp = sst.Component(
-    "Research Component (SystemC)", "plague.randf")
-randf_rsrch_comp.addParams({
+mul_inv_fat_comp = sst.Component(
+    "Fatality Multiplicative Inverse Component (SystemC)", "plague.mul_inv")
+mul_inv_fat_comp.addParams({
     "clock": CLOCK,
-    "proc": os.path.join(BASE_PATH, "randf.o"),
+    "proc": os.path.join(BASE_PATH, "mul_inv.o"),
+    "ipc_port": get_rand_tmp(),
+})
+
+mul_inv_br_comp = sst.Component(
+    "Birth Rate Multiplicative Inverse Component (SystemC)", "plague.mul_inv")
+mul_inv_br_comp.addParams({
+    "clock": CLOCK,
+    "proc": os.path.join(BASE_PATH, "mul_inv.o"),
+    "ipc_port": get_rand_tmp(),
+})
+
+mul_inv_rsrch_comp = sst.Component(
+    "Research Multiplicative Inverse Component (SystemC)", "plague.mul_inv")
+mul_inv_rsrch_comp.addParams({
+    "clock": CLOCK,
+    "proc": os.path.join(BASE_PATH, "mul_inv.o"),
     "ipc_port": get_rand_tmp(),
 })
 
@@ -210,17 +193,13 @@ def connect_comps(comp, main_comp, comp_name, main_comp_name):
 # connect the subcomponents
 connect_comps(mul_inv_sev_comp, plague_main, "mul_inv", "mul_inv_sev")
 connect_comps(mul_inv_inf_comp, plague_main, "mul_inv", "mul_inv_inf")
-
+connect_comps(mul_inv_fat_comp, plague_main, "mul_inv", "mul_inv_fat")
+connect_comps(mul_inv_br_comp, plague_main, "mul_inv", "mul_inv_br")
+connect_comps(mul_inv_rsrch_comp, plague_main, "mul_inv", "mul_inv_rsrch")
 
 connect_comps(rng_limit_comp, plague_main, "rng", "rng_limit")
 connect_comps(rng_pop_inf_comp, plague_main, "rng", "rng_pop_inf")
 connect_comps(rng_mut_comp, plague_main, "rng", "rng_mut")
-
-# connect_comps(randf_sev_comp, plague_main, "randf", "randf_sev")
-# connect_comps(randf_inf_comp, plague_main, "randf", "randf_inf")
-connect_comps(randf_fat_comp, plague_main, "randf", "randf_fat")
-connect_comps(randf_br_comp, plague_main, "randf", "randf_br")
-connect_comps(randf_rsrch_comp, plague_main, "randf", "randf_rsrch")
 
 connect_comps(minf_fat_comp, plague_main, "minf", "min_fat")
 connect_comps(minf_inf_comp, plague_main, "minf", "min_inf")

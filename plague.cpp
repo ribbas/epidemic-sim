@@ -32,12 +32,18 @@ bool plague::tick(SST::Cycle_t current_cycle) {
             align_signal_width('0', 4, rand_int_str);
             // std::cout << m_cycle << " randf_rsrch " << rand_int_str << '\n';
             // random float between 1/2 and 1/100
-            randf_rsrch_din_link->send(new SST::Interfaces::StringEvent(
+            // randf_rsrch_din_link->send(new SST::Interfaces::StringEvent(
+            //         std::to_string(m_keep_send) +
+            //         std::to_string(m_keep_recv) +
+            //         "1" +
+            //         seed_research +
+            //         "0020100" +
+            //         current_cycle_str
+            // ));
+            mul_inv_rsrch_din_link->send(new SST::Interfaces::StringEvent(
                     std::to_string(m_keep_send) +
                     std::to_string(m_keep_recv) +
-                    "1" +
-                    seed_research +
-                    "0020100" +
+                    rand_int_str +
                     current_cycle_str
             ));
 
@@ -106,30 +112,25 @@ bool plague::tick(SST::Cycle_t current_cycle) {
             align_signal_width('0', 4, rand_int_str);
             // std::cout << m_cycle << " randf_fat " << rand_int_str << '\n';
             // random float between 1/2 and 1/m_limit
-            randf_fat_din_link->send(new SST::Interfaces::StringEvent(
+            // randf_fat_din_link->send(new SST::Interfaces::StringEvent(
+            //         std::to_string(m_keep_send) +
+            //         std::to_string(m_keep_recv) +
+            //         "1" +
+            //         seed_let +
+            //         m_lower_limit +
+            //         m_limit +
+            //         current_cycle_str
+            // ));
+            mul_inv_fat_din_link->send(new SST::Interfaces::StringEvent(
                     std::to_string(m_keep_send) +
                     std::to_string(m_keep_recv) +
-                    "1" +
-                    seed_let +
-                    m_lower_limit +
-                    m_limit +
+                    rand_int_str +
                     current_cycle_str
             ));
 
             m_dis.param(std::uniform_int_distribution<unsigned int>::param_type(100, std::stoi(m_limit)));
             rand_int_str = std::to_string(m_dis(m_gen));
             align_signal_width('0', 4, rand_int_str);
-            // std::cout << m_cycle << " sending to mul_inv_inf " << rand_int_str << '\n';
-            // random float between 1/2 and 1/m_limit
-            // randf_inf_din_link->send(new SST::Interfaces::StringEvent(
-            //         std::to_string(m_keep_send) +
-            //         std::to_string(m_keep_recv) +
-            //         "1" +
-            //         seed_inf +
-            //         m_lower_limit +
-            //         m_limit +
-            //         current_cycle_str
-            // ));
             mul_inv_inf_din_link->send(new SST::Interfaces::StringEvent(
                     std::to_string(m_keep_send) +
                     std::to_string(m_keep_recv) +
@@ -194,18 +195,30 @@ bool plague::tick(SST::Cycle_t current_cycle) {
 
 
             // disable randf_br
-            randf_br_din_link->send(new SST::Interfaces::StringEvent(
+            // randf_br_din_link->send(new SST::Interfaces::StringEvent(
+            //         std::to_string(m_keep_send) +
+            //         std::to_string(m_keep_recv) +
+            //         "0000000000000" +
+            //         current_cycle_str
+            // ));
+            mul_inv_br_din_link->send(new SST::Interfaces::StringEvent(
                     std::to_string(m_keep_send) +
                     std::to_string(m_keep_recv) +
-                    "0000000000000" +
+                    "0000" +
                     current_cycle_str
             ));
 
             // disable randf_fat
-            randf_fat_din_link->send(new SST::Interfaces::StringEvent(
+            // randf_fat_din_link->send(new SST::Interfaces::StringEvent(
+            //         std::to_string(m_keep_send) +
+            //         std::to_string(m_keep_recv) +
+            //         "0000000000000" +
+            //         current_cycle_str
+            // ));
+            mul_inv_fat_din_link->send(new SST::Interfaces::StringEvent(
                     std::to_string(m_keep_send) +
                     std::to_string(m_keep_recv) +
-                    "0000000000000" +
+                    "0000" +
                     current_cycle_str
             ));
 
@@ -225,10 +238,16 @@ bool plague::tick(SST::Cycle_t current_cycle) {
             // ));
 
             // disable randf_rsrch
-            randf_rsrch_din_link->send(new SST::Interfaces::StringEvent(
+            // randf_rsrch_din_link->send(new SST::Interfaces::StringEvent(
+            //         std::to_string(m_keep_send) +
+            //         std::to_string(m_keep_recv) +
+            //         "0000000000000" +
+            //         current_cycle_str
+            // ));
+            mul_inv_rsrch_din_link->send(new SST::Interfaces::StringEvent(
                     std::to_string(m_keep_send) +
                     std::to_string(m_keep_recv) +
-                    "0000000000000" +
+                    "0000" +
                     current_cycle_str
             ));
 

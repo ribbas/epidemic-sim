@@ -15,21 +15,6 @@ if __name__ == "__main__":
     }
 
     if sys.argv[-1] == "systemc":
-        randf = SystemC(
-            **ARGS,
-            module="randf",
-        )
-        randf.set_ports((
-            ("clock", "clock", "<bool>", 5),
-            ("input", "en", "<bool>"),
-            ("input", "seed", "<sc_uint<16>>"),
-            ("input", "lower_limit", "<sc_uint<8>>"),
-            ("input", "upper_limit", "<sc_uint<10>>"),
-            ("output", "data_out", "<float>", 12),
-        ))
-        randf.fixed_width_float_output(9)
-        randf.disable_runtime_warnings(["SC_ID_NO_SC_START_ACTIVITY_"])
-        randf.generate_bbox()
 
         minf = SystemC(
             **ARGS,

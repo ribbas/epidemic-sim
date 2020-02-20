@@ -62,11 +62,17 @@ plague::plague(SST::ComponentId_t id, SST::Params &params) :
         //         "randf_inf_dout",
         //         new SST::Event::Handler<plague>(this, &plague::randf_inf))
         // ),
+        // // initialize lethality random float links
+        // randf_fat_din_link(configureLink("randf_fat_din")),
+        // randf_fat_dout_link(configureLink(
+        //         "randf_fat_dout",
+        //         new SST::Event::Handler<plague>(this, &plague::randf_fat))
+        // ),
         // initialize lethality random float links
-        randf_fat_din_link(configureLink("randf_fat_din")),
-        randf_fat_dout_link(configureLink(
-                "randf_fat_dout",
-                new SST::Event::Handler<plague>(this, &plague::randf_fat))
+        mul_inv_fat_din_link(configureLink("mul_inv_fat_din")),
+        mul_inv_fat_dout_link(configureLink(
+                "mul_inv_fat_dout",
+                new SST::Event::Handler<plague>(this, &plague::mul_inv_fat))
         ),
         // // initialize severity random float links
         // randf_sev_din_link(configureLink("randf_sev_din")),
@@ -74,17 +80,29 @@ plague::plague(SST::ComponentId_t id, SST::Params &params) :
         //         "randf_sev_dout",
         //         new SST::Event::Handler<plague>(this, &plague::randf_sev))
         // ),
+        // // initialize birth rate random float links
+        // randf_br_din_link(configureLink("randf_br_din")),
+        // randf_br_dout_link(configureLink(
+        //         "randf_br_dout",
+        //         new SST::Event::Handler<plague>(this, &plague::randf_br))
+        // ),
         // initialize birth rate random float links
-        randf_br_din_link(configureLink("randf_br_din")),
-        randf_br_dout_link(configureLink(
-                "randf_br_dout",
-                new SST::Event::Handler<plague>(this, &plague::randf_br))
+        mul_inv_br_din_link(configureLink("mul_inv_br_din")),
+        mul_inv_br_dout_link(configureLink(
+                "mul_inv_br_dout",
+                new SST::Event::Handler<plague>(this, &plague::mul_inv_br))
         ),
+        // // initialize research random float links
+        // randf_rsrch_din_link(configureLink("randf_rsrch_din")),
+        // randf_rsrch_dout_link(configureLink(
+        //         "randf_rsrch_dout",
+        //         new SST::Event::Handler<plague>(this, &plague::randf_rsrch))
+        // ),
         // initialize research random float links
-        randf_rsrch_din_link(configureLink("randf_rsrch_din")),
-        randf_rsrch_dout_link(configureLink(
-                "randf_rsrch_dout",
-                new SST::Event::Handler<plague>(this, &plague::randf_rsrch))
+        mul_inv_rsrch_din_link(configureLink("mul_inv_rsrch_din")),
+        mul_inv_rsrch_dout_link(configureLink(
+                "mul_inv_rsrch_dout",
+                new SST::Event::Handler<plague>(this, &plague::mul_inv_rsrch))
         ),
         // initialize mul population infected links
         mul_pop_inf_din_link(configureLink("mul_pop_inf_din")),
