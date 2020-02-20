@@ -12,7 +12,7 @@ set(CMAKE_CXX_STANDARD ${SystemC_CXX_STANDARD})
 # -------------------- SYSTEMC CONFIGS --------------------
 
 # ------------------ SYSTEMC EXECUTABLES ------------------
-foreach (SYSC_MOD minf randf rng sc_floor sc_mul)
+foreach (SYSC_MOD minf randf rng sc_floor sc_mul mul_inv)
     add_executable(${SYSC_MOD}.o systemc/blackboxes/${SYSC_MOD}_driver.cpp)
     target_link_libraries(${SYSC_MOD}.o SystemC::systemc)
 endforeach ()
@@ -25,6 +25,7 @@ add_executable(
         chisel/blackboxes/flash_mem_comp.cpp
         pyrtl/blackboxes/mutation_comp.cpp
         systemc/blackboxes/minf_comp.cpp
+        systemc/blackboxes/mul_inv_comp.cpp
         systemc/blackboxes/randf_comp.cpp
         systemc/blackboxes/rng_comp.cpp
         systemc/blackboxes/sc_floor_comp.cpp

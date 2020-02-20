@@ -6,6 +6,8 @@
 #include <sst/core/link.h>
 #include <sst/core/rng/mersenne.h>
 
+#include <random>
+
 #define POPULATION_TOTAL 7760000000
 
 class plague : public SST::Component {
@@ -38,13 +40,17 @@ public:
 
     void rng_mut(SST::Event *);
 
+    void mul_inv_sev(SST::Event *);
+
+    void mul_inv_inf(SST::Event *);
+
     void randf_br(SST::Event *);
 
     void randf_rsrch(SST::Event *);
 
-    void randf_sev(SST::Event *);
+    // void randf_sev(SST::Event *);
 
-    void randf_inf(SST::Event *);
+    // void randf_inf(SST::Event *);
 
     void randf_fat(SST::Event *);
 
@@ -86,10 +92,17 @@ public:
             { "mul_pop_inf_dout", "mul_pop_inf_dout", { "sst.Interfaces.StringEvent" }},
             { "mul_pop_dead_din", "mul_pop_dead_din", { "sst.Interfaces.StringEvent" }},
             { "mul_pop_dead_dout", "mul_pop_dead_dout", { "sst.Interfaces.StringEvent" }},
+
             { "randf_sev_din", "randf_sev_din", { "sst.Interfaces.StringEvent" }},
             { "randf_sev_dout", "randf_sev_dout", { "sst.Interfaces.StringEvent" }},
             { "randf_inf_din", "randf_inf_din", { "sst.Interfaces.StringEvent" }},
             { "randf_inf_dout", "randf_inf_dout", { "sst.Interfaces.StringEvent" }},
+
+            { "mul_inv_sev_din", "mul_inv_sev_din", { "sst.Interfaces.StringEvent" }},
+            { "mul_inv_sev_dout", "mul_inv_sev_dout", { "sst.Interfaces.StringEvent" }},
+            { "mul_inv_inf_din", "mul_inv_inf_din", { "sst.Interfaces.StringEvent" }},
+            { "mul_inv_inf_dout", "mul_inv_inf_dout", { "sst.Interfaces.StringEvent" }},
+
             { "randf_fat_din", "randf_fat_din", { "sst.Interfaces.StringEvent" }},
             { "randf_fat_dout", "randf_fat_dout", { "sst.Interfaces.StringEvent" }},
             { "randf_br_din", "randf_br_din", { "sst.Interfaces.StringEvent" }},
@@ -120,13 +133,17 @@ private:
             seed_pop_inf, seed_research, seed_mutation;
     SST::RNG::MersenneRNG *m_rng;
 
-    // SST links and variables
+    std::mt19937 m_gen;
+    std::uniform_int_distribution<unsigned int> m_dis;
+
     SST::Output m_output;
     SST::Link *flash_mem_din_link, *flash_mem_dout_link,
             *mutation_din_link, *mutation_dout_link,
             *rng_limit_din_link, *rng_limit_dout_link,
             *rng_pop_inf_din_link, *rng_pop_inf_dout_link,
             *rng_mut_din_link, *rng_mut_dout_link,
+            *mul_inv_inf_din_link, *mul_inv_inf_dout_link,
+            *mul_inv_sev_din_link, *mul_inv_sev_dout_link,
             *randf_inf_din_link, *randf_inf_dout_link,
             *randf_fat_din_link, *randf_fat_dout_link,
             *randf_sev_din_link, *randf_sev_dout_link,
@@ -152,6 +169,7 @@ private:
 
     // flash memory variables
     std::string m_mem_read = "101", m_mem_write = "111", m_mem_data_out;
+    std::string m_lower_limit = "100";
 
     unsigned int m_cycle{};
     FILE *m_fp{};

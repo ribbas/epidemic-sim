@@ -11,6 +11,7 @@ plague::plague(SST::ComponentId_t id, SST::Params &params) :
         m_clock(params.find<std::string>("CLOCK", "1Hz")),
         seed_lim(params.find<std::string>("SEED", "00000")),
         m_rng(new SST::RNG::MersenneRNG(std::stoi(seed_lim))),
+        m_gen(std::stoi(seed_lim)),
         // initialize ram links
         flash_mem_din_link(configureLink("flash_mem_din")),
         flash_mem_dout_link(configureLink(
@@ -41,24 +42,38 @@ plague::plague(SST::ComponentId_t id, SST::Params &params) :
                 "rng_mut_dout",
                 new SST::Event::Handler<plague>(this, &plague::rng_mut))
         ),
-        // initialize infectivity random float links
-        randf_inf_din_link(configureLink("randf_inf_din")),
-        randf_inf_dout_link(configureLink(
-                "randf_inf_dout",
-                new SST::Event::Handler<plague>(this, &plague::randf_inf))
+
+        // initialize mutation RNG links
+        mul_inv_inf_din_link(configureLink("mul_inv_inf_din")),
+        mul_inv_inf_dout_link(configureLink(
+                "mul_inv_inf_dout",
+                new SST::Event::Handler<plague>(this, &plague::mul_inv_inf))
         ),
+        // initialize mutation RNG links
+        mul_inv_sev_din_link(configureLink("mul_inv_sev_din")),
+        mul_inv_sev_dout_link(configureLink(
+                "mul_inv_sev_dout",
+                new SST::Event::Handler<plague>(this, &plague::mul_inv_sev))
+        ),
+
+        // // initialize infectivity random float links
+        // randf_inf_din_link(configureLink("randf_inf_din")),
+        // randf_inf_dout_link(configureLink(
+        //         "randf_inf_dout",
+        //         new SST::Event::Handler<plague>(this, &plague::randf_inf))
+        // ),
         // initialize lethality random float links
         randf_fat_din_link(configureLink("randf_fat_din")),
         randf_fat_dout_link(configureLink(
                 "randf_fat_dout",
                 new SST::Event::Handler<plague>(this, &plague::randf_fat))
         ),
-        // initialize severity random float links
-        randf_sev_din_link(configureLink("randf_sev_din")),
-        randf_sev_dout_link(configureLink(
-                "randf_sev_dout",
-                new SST::Event::Handler<plague>(this, &plague::randf_sev))
-        ),
+        // // initialize severity random float links
+        // randf_sev_din_link(configureLink("randf_sev_din")),
+        // randf_sev_dout_link(configureLink(
+        //         "randf_sev_dout",
+        //         new SST::Event::Handler<plague>(this, &plague::randf_sev))
+        // ),
         // initialize birth rate random float links
         randf_br_din_link(configureLink("randf_br_din")),
         randf_br_dout_link(configureLink(
@@ -136,6 +151,19 @@ plague::plague(SST::ComponentId_t id, SST::Params &params) :
 void plague::setup() {
 
     m_output.verbose(CALL_INFO, 1, 0, "Component is being set up.\n");
+    m_dis.param(std::uniform_int_distribution<unsigned int>::param_type(5, 100));
+    std::cout << m_dis(m_gen) << '\n';
+    std::cout << m_dis(m_gen) << '\n';
+    m_dis.param(std::uniform_int_distribution<unsigned int>::param_type(6, 8));
+    std::cout << m_dis(m_gen) << '\n';
+    std::cout << m_dis(m_gen) << '\n';
+    std::cout << m_dis(m_gen) << '\n';
+    m_dis.param(std::uniform_int_distribution<unsigned int>::param_type(1, 6));
+    std::cout << m_dis(m_gen) << '\n';
+    std::cout << m_dis(m_gen) << '\n';
+    std::cout << m_dis(m_gen) << '\n';
+    std::cout << m_dis(m_gen) << '\n';
+
     get_seed(seed_sev);
     get_seed(seed_birth_rate);
     get_seed(seed_let);

@@ -9,7 +9,7 @@ bool plague::tick(SST::Cycle_t current_cycle) {
     m_cycle = current_cycle;
     std::string current_cycle_str = std::to_string(current_cycle);
 
-    std::string ram_data, ram_addr;
+    std::string ram_data, ram_addr, rand_int_str;
 
     if (m_mem_read_flag) {
 
@@ -27,6 +27,10 @@ bool plague::tick(SST::Cycle_t current_cycle) {
 
         if (m_total_infected > m_cure_threshold) {
 
+            m_dis.param(std::uniform_int_distribution<unsigned int>::param_type(5, 100));
+            rand_int_str = std::to_string(m_dis(m_gen));
+            align_signal_width('0', 4, rand_int_str);
+            // std::cout << m_cycle << " randf_rsrch " << rand_int_str << '\n';
             // random float between 1/2 and 1/100
             randf_rsrch_din_link->send(new SST::Interfaces::StringEvent(
                     std::to_string(m_keep_send) +
@@ -37,6 +41,10 @@ bool plague::tick(SST::Cycle_t current_cycle) {
                     current_cycle_str
             ));
 
+            m_dis.param(std::uniform_int_distribution<unsigned int>::param_type(5, 100));
+            rand_int_str = std::to_string(m_dis(m_gen));
+            align_signal_width('0', 4, rand_int_str);
+            // std::cout << m_cycle << " rng_mut " << rand_int_str << '\n';
             // random int between 0 and 8
             rng_mut_din_link->send(new SST::Interfaces::StringEvent(
                     std::to_string(m_keep_send) +
@@ -65,6 +73,10 @@ bool plague::tick(SST::Cycle_t current_cycle) {
             m_output.verbose(CALL_INFO, 1, 0, "   Day  |  Cure  | Infected | Dead\n");
             m_output.verbose(CALL_INFO, 1, 0, "--------+--------+----------+---------\n");
 
+            m_dis.param(std::uniform_int_distribution<unsigned int>::param_type(100, 1023));
+            rand_int_str = std::to_string(m_dis(m_gen));
+            align_signal_width('0', 4, rand_int_str);
+            // std::cout << m_cycle << " rng_limit " << rand_int_str << '\n';
             // random int between 100 and 1023
             rng_limit_din_link->send(new SST::Interfaces::StringEvent(
                     std::to_string(m_keep_send) +
@@ -89,28 +101,46 @@ bool plague::tick(SST::Cycle_t current_cycle) {
 
         if (current_cycle > 1 && m_keep_recv) {
 
+            m_dis.param(std::uniform_int_distribution<unsigned int>::param_type(100, std::stoi(m_limit)));
+            rand_int_str = std::to_string(m_dis(m_gen));
+            align_signal_width('0', 4, rand_int_str);
+            // std::cout << m_cycle << " randf_fat " << rand_int_str << '\n';
             // random float between 1/2 and 1/m_limit
             randf_fat_din_link->send(new SST::Interfaces::StringEvent(
                     std::to_string(m_keep_send) +
                     std::to_string(m_keep_recv) +
                     "1" +
                     seed_let +
-                    "100" +
+                    m_lower_limit +
                     m_limit +
                     current_cycle_str
             ));
 
+            m_dis.param(std::uniform_int_distribution<unsigned int>::param_type(100, std::stoi(m_limit)));
+            rand_int_str = std::to_string(m_dis(m_gen));
+            align_signal_width('0', 4, rand_int_str);
+            // std::cout << m_cycle << " sending to mul_inv_inf " << rand_int_str << '\n';
             // random float between 1/2 and 1/m_limit
-            randf_inf_din_link->send(new SST::Interfaces::StringEvent(
+            // randf_inf_din_link->send(new SST::Interfaces::StringEvent(
+            //         std::to_string(m_keep_send) +
+            //         std::to_string(m_keep_recv) +
+            //         "1" +
+            //         seed_inf +
+            //         m_lower_limit +
+            //         m_limit +
+            //         current_cycle_str
+            // ));
+            mul_inv_inf_din_link->send(new SST::Interfaces::StringEvent(
                     std::to_string(m_keep_send) +
                     std::to_string(m_keep_recv) +
-                    "1" +
-                    seed_inf +
-                    "100" +
-                    m_limit +
+                    rand_int_str +
                     current_cycle_str
             ));
 
+            m_dis.param(std::uniform_int_distribution<unsigned int>::param_type(1, 10));
+            rand_int_str = std::to_string(m_dis(m_gen));
+            align_signal_width('0', 4, rand_int_str);
+            // std::cout << m_cycle << " rng_pop_inf " << rand_int_str << '\n';
             // random int between 1 and 10
             rng_pop_inf_din_link->send(new SST::Interfaces::StringEvent(
                     std::to_string(m_keep_send) +
@@ -144,29 +174,30 @@ bool plague::tick(SST::Cycle_t current_cycle) {
             rng_limit_din_link->send(new SST::Interfaces::StringEvent(
                     std::to_string(m_keep_send) +
                     std::to_string(m_keep_recv) +
-                    "0" +
-                    seed_lim +
-                    "0000000" +
+                    "0000000000000" +
                     current_cycle_str
             ));
 
-            // disable randf_sev
-            randf_sev_din_link->send(new SST::Interfaces::StringEvent(
+            // // disable randf_sev
+            // randf_sev_din_link->send(new SST::Interfaces::StringEvent(
+            //         std::to_string(m_keep_send) +
+            //         std::to_string(m_keep_recv) +
+            //         "0000000000000" +
+            //         current_cycle_str
+            // ));
+            mul_inv_sev_din_link->send(new SST::Interfaces::StringEvent(
                     std::to_string(m_keep_send) +
                     std::to_string(m_keep_recv) +
-                    "0" +
-                    seed_sev +
-                    "0000000" +
+                    "0000" +
                     current_cycle_str
             ));
+
 
             // disable randf_br
             randf_br_din_link->send(new SST::Interfaces::StringEvent(
                     std::to_string(m_keep_send) +
                     std::to_string(m_keep_recv) +
-                    "0" +
-                    seed_birth_rate +
-                    "0000000" +
+                    "0000000000000" +
                     current_cycle_str
             ));
 
@@ -174,29 +205,30 @@ bool plague::tick(SST::Cycle_t current_cycle) {
             randf_fat_din_link->send(new SST::Interfaces::StringEvent(
                     std::to_string(m_keep_send) +
                     std::to_string(m_keep_recv) +
-                    "0" +
-                    seed_let +
-                    "0000000" +
+                    "0000000000000" +
                     current_cycle_str
             ));
 
-            // disable randf_inf
-            randf_inf_din_link->send(new SST::Interfaces::StringEvent(
+            mul_inv_inf_din_link->send(new SST::Interfaces::StringEvent(
                     std::to_string(m_keep_send) +
                     std::to_string(m_keep_recv) +
-                    "0" +
-                    seed_inf +
-                    "0000000" +
+                    "0000" +
                     current_cycle_str
             ));
+
+            // // disable randf_inf
+            // randf_inf_din_link->send(new SST::Interfaces::StringEvent(
+            //         std::to_string(m_keep_send) +
+            //         std::to_string(m_keep_recv) +
+            //         "0000000000000" +
+            //         current_cycle_str
+            // ));
 
             // disable randf_rsrch
             randf_rsrch_din_link->send(new SST::Interfaces::StringEvent(
                     std::to_string(m_keep_send) +
                     std::to_string(m_keep_recv) +
-                    "0" +
-                    seed_research +
-                    "0000000" +
+                    "0000000000000" +
                     current_cycle_str
             ));
 
@@ -204,9 +236,7 @@ bool plague::tick(SST::Cycle_t current_cycle) {
             rng_mut_din_link->send(new SST::Interfaces::StringEvent(
                     std::to_string(m_keep_send) +
                     std::to_string(m_keep_recv) +
-                    "0" +
-                    seed_mutation +
-                    "0000000" +
+                    "0000000000000" +
                     current_cycle_str
             ));
 
@@ -214,9 +244,7 @@ bool plague::tick(SST::Cycle_t current_cycle) {
             rng_pop_inf_din_link->send(new SST::Interfaces::StringEvent(
                     std::to_string(m_keep_send) +
                     std::to_string(m_keep_recv) +
-                    "0" +
-                    seed_pop_inf +
-                    "0000000" +
+                    "0000000000000" +
                     current_cycle_str
             ));
 
