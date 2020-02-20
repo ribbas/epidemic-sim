@@ -22,8 +22,6 @@ public:
 
     bool tick(SST::Cycle_t);
 
-    void get_seed(std::string &);
-
     static void align_signal_width(char, int, std::string &);
 
     static void append_signal(char, int, std::string &);
@@ -34,12 +32,6 @@ public:
 
     void mutation(SST::Event *);
 
-    void rng_limit(SST::Event *);
-
-    void rng_pop_inf(SST::Event *);
-
-    void rng_mut(SST::Event *);
-
     void mul_inv_sev(SST::Event *);
 
     void mul_inv_inf(SST::Event *);
@@ -47,10 +39,6 @@ public:
     void mul_inv_br(SST::Event *);
 
     void mul_inv_rsrch(SST::Event *);
-
-    // void mul_inv_sev(SST::Event *);
-
-    // void mul_inv_inf(SST::Event *);
 
     void mul_inv_fat(SST::Event *);
 
@@ -82,17 +70,6 @@ public:
 
     // Port name, description, event type
     SST_ELI_DOCUMENT_PORTS(
-            { "rng_limit_din", "rng_limit_din", { "sst.Interfaces.StringEvent" }},
-            { "rng_limit_dout", "rng_limit_dout", { "sst.Interfaces.StringEvent" }},
-            { "rng_pop_inf_dout", "rng_pop_inf_dout", { "sst.Interfaces.StringEvent" }},
-            { "rng_pop_inf_din", "rng_pop_inf_din", { "sst.Interfaces.StringEvent" }},
-            { "rng_mut_dout", "rng_mut_dout", { "sst.Interfaces.StringEvent" }},
-            { "rng_mut_din", "rng_mut_din", { "sst.Interfaces.StringEvent" }},
-            { "mul_pop_inf_din", "mul_pop_inf_din", { "sst.Interfaces.StringEvent" }},
-            { "mul_pop_inf_dout", "mul_pop_inf_dout", { "sst.Interfaces.StringEvent" }},
-            { "mul_pop_dead_din", "mul_pop_dead_din", { "sst.Interfaces.StringEvent" }},
-            { "mul_pop_dead_dout", "mul_pop_dead_dout", { "sst.Interfaces.StringEvent" }},
-
             { "mul_inv_sev_din", "mul_inv_sev_din", { "sst.Interfaces.StringEvent" }},
             { "mul_inv_sev_dout", "mul_inv_sev_dout", { "sst.Interfaces.StringEvent" }},
             { "mul_inv_inf_din", "mul_inv_inf_din", { "sst.Interfaces.StringEvent" }},
@@ -103,7 +80,10 @@ public:
             { "mul_inv_br_dout", "mul_inv_br_dout", { "sst.Interfaces.StringEvent" }},
             { "mul_inv_rsrch_din", "mul_inv_rsrch_din", { "sst.Interfaces.StringEvent" }},
             { "mul_inv_rsrch_dout", "mul_inv_rsrch_dout", { "sst.Interfaces.StringEvent" }},
-
+            { "mul_pop_inf_din", "mul_pop_inf_din", { "sst.Interfaces.StringEvent" }},
+            { "mul_pop_inf_dout", "mul_pop_inf_dout", { "sst.Interfaces.StringEvent" }},
+            { "mul_pop_dead_din", "mul_pop_dead_din", { "sst.Interfaces.StringEvent" }},
+            { "mul_pop_dead_dout", "mul_pop_dead_dout", { "sst.Interfaces.StringEvent" }},
             { "floor_pop_dead_din", "floor_pop_dead_din", { "sst.Interfaces.StringEvent" }},
             { "floor_pop_dead_dout", "floor_pop_dead_dout", { "sst.Interfaces.StringEvent" }},
             { "min_fat_din", "min_fat_din", { "sst.Interfaces.StringEvent" }},
@@ -124,23 +104,17 @@ private:
 
     // SST parameters
     std::string m_clock;
-    std::string seed_lim, seed_sev, seed_birth_rate, seed_let, seed_inf,
-            seed_pop_inf, seed_research, seed_mutation;
-    SST::RNG::MersenneRNG *m_rng;
-
+    uint16_t seed_lim;
     std::mt19937 m_gen;
     std::uniform_int_distribution<unsigned int> m_dis;
 
     SST::Output m_output;
     SST::Link *flash_mem_din_link, *flash_mem_dout_link,
             *mutation_din_link, *mutation_dout_link,
-            *rng_limit_din_link, *rng_limit_dout_link,
-            *rng_pop_inf_din_link, *rng_pop_inf_dout_link,
-            *rng_mut_din_link, *rng_mut_dout_link,
-            *mul_inv_inf_din_link, *mul_inv_inf_dout_link,
-            *mul_inv_fat_din_link, *mul_inv_fat_dout_link,
             *mul_inv_sev_din_link, *mul_inv_sev_dout_link,
             *mul_inv_br_din_link, *mul_inv_br_dout_link,
+            *mul_inv_inf_din_link, *mul_inv_inf_dout_link,
+            *mul_inv_fat_din_link, *mul_inv_fat_dout_link,
             *mul_inv_rsrch_din_link, *mul_inv_rsrch_dout_link,
             *mul_pop_inf_din_link, *mul_pop_inf_dout_link,
             *mul_pop_dead_din_link, *mul_pop_dead_dout_link,
@@ -155,14 +129,13 @@ private:
     unsigned int LOOPEND = (SIMTIME - 2);
     bool m_keep_send{}, m_keep_recv{};
 
-    unsigned int m_cure_threshold{}, m_batch_infected{}, m_total_infected{}, m_total_infected_today{}, m_total_dead_today{}, m_gene{};
+    unsigned int m_limit{}, m_cure_threshold{}, m_batch_infected{}, m_total_infected{}, m_total_infected_today{}, m_total_dead_today{}, m_gene{};
     float m_severity{}, m_infectivity{}, m_fatality{}, m_birth_rate{}, m_cure{}, m_research{};
-    std::string m_limit, m_mutation = "0";
+    std::string m_mutation = "0";
     bool m_mutate_lock = false, m_loop_lock = true, m_mem_read_flag = false;
 
     // flash memory variables
     std::string m_mem_read = "101", m_mem_write = "111", m_mem_data_out;
-    std::string m_lower_limit = "100";
 
     unsigned int m_cycle{};
     FILE *m_fp{};

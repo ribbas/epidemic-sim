@@ -26,37 +26,12 @@ plague_main = sst.Component(
     "Plague Simulation Driver", "plague.plague")
 plague_main.addParams({
     "CLOCK": CLOCK,
-    "SEED": "00000",
+    "SEED": 2,
 })
 
 
 # SystemC components
 ###############################################################################
-# RNG components
-rng_limit_comp = sst.Component(
-    "Random Limit Component (SystemC)", "plague.rng")
-rng_limit_comp.addParams({
-    "clock": CLOCK,
-    "proc": os.path.join(BASE_PATH, "rng.o"),
-    "ipc_port": get_rand_tmp(),
-})
-
-rng_pop_inf_comp = sst.Component(
-    "Infected Population RNG Component (SystemC)", "plague.rng")
-rng_pop_inf_comp.addParams({
-    "clock": CLOCK,
-    "proc": os.path.join(BASE_PATH, "rng.o"),
-    "ipc_port": get_rand_tmp(),
-})
-
-rng_mut_comp = sst.Component(
-    "Mutation RNG Component (SystemC)", "plague.rng")
-rng_mut_comp.addParams({
-    "clock": CLOCK,
-    "proc": os.path.join(BASE_PATH, "rng.o"),
-    "ipc_port": get_rand_tmp(),
-})
-
 # Multiplicative inverse components
 mul_inv_sev_comp = sst.Component(
     "Severity Multiplicative Inverse Component (SystemC)", "plague.mul_inv")
@@ -196,10 +171,6 @@ connect_comps(mul_inv_inf_comp, plague_main, "mul_inv", "mul_inv_inf")
 connect_comps(mul_inv_fat_comp, plague_main, "mul_inv", "mul_inv_fat")
 connect_comps(mul_inv_br_comp, plague_main, "mul_inv", "mul_inv_br")
 connect_comps(mul_inv_rsrch_comp, plague_main, "mul_inv", "mul_inv_rsrch")
-
-connect_comps(rng_limit_comp, plague_main, "rng", "rng_limit")
-connect_comps(rng_pop_inf_comp, plague_main, "rng", "rng_pop_inf")
-connect_comps(rng_mut_comp, plague_main, "rng", "rng_mut")
 
 connect_comps(minf_fat_comp, plague_main, "minf", "min_fat")
 connect_comps(minf_inf_comp, plague_main, "minf", "min_inf")

@@ -55,21 +55,6 @@ if __name__ == "__main__":
         mul_inv.disable_runtime_warnings(["SC_ID_NO_SC_START_ACTIVITY_"])
         mul_inv.generate_bbox()
 
-        rng = SystemC(
-            **ARGS,
-            module="rng",
-        )
-        rng.set_ports((
-            ("clock", "clock", "<bool>", 5),
-            ("input", "en", "<bool>"),
-            ("input", "seed", "<sc_uint<16>>"),
-            ("input", "lower_limit", "<sc_uint<8>>"),
-            ("input", "upper_limit", "<sc_uint<10>>"),
-            ("output", "data_out", "<sc_uint<10>>"),
-        ))
-        rng.disable_runtime_warnings(["SC_ID_NO_SC_START_ACTIVITY_"])
-        rng.generate_bbox()
-
         sc_floor = SystemC(
             **ARGS,
             module="sc_floor",

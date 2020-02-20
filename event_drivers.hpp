@@ -51,56 +51,6 @@ void plague::mutation(SST::Event *ev) {
 
 }
 
-void plague::rng_limit(SST::Event *ev) {
-
-    auto *se = dynamic_cast<SST::Interfaces::StringEvent *>(ev);
-    if (se && m_keep_recv) {
-
-        std::string rand_int_str;
-
-        m_limit = se->getString();
-        align_signal_width('0', 4, m_limit);
-
-        m_dis.param(std::uniform_int_distribution<unsigned int>::param_type(100, std::stoi(m_limit)));
-        rand_int_str = std::to_string(m_dis(m_gen));
-        align_signal_width('0', 4, rand_int_str);
-        mul_inv_sev_din_link->send(new SST::Interfaces::StringEvent(
-                std::to_string(m_keep_send) +
-                std::to_string(m_keep_recv) +
-                rand_int_str +
-                std::to_string(m_cycle)
-        ));
-
-        m_dis.param(std::uniform_int_distribution<unsigned int>::param_type(100, std::stoi(m_limit)));
-        rand_int_str = std::to_string(m_dis(m_gen));
-        align_signal_width('0', 4, rand_int_str);
-        // std::cout << m_cycle << " rng_pop_inf " << rand_int_str << '\n';
-        mul_inv_br_din_link->send(new SST::Interfaces::StringEvent(
-                std::to_string(m_keep_send) +
-                std::to_string(m_keep_recv) +
-                rand_int_str +
-                std::to_string(m_cycle)
-        ));
-
-    }
-
-    delete se;
-
-}
-
-void plague::rng_mut(SST::Event *ev) {
-
-    auto *se = dynamic_cast<SST::Interfaces::StringEvent *>(ev);
-    if (se && m_keep_recv) {
-
-        m_mutation = se->getString();
-
-    }
-
-    delete se;
-
-}
-
 void plague::mul_inv_inf(SST::Event *ev) {
 
     auto *se = dynamic_cast<SST::Interfaces::StringEvent *>(ev);
@@ -109,8 +59,6 @@ void plague::mul_inv_inf(SST::Event *ev) {
 
     if (se && m_keep_recv) {
 
-        // std::cout << m_cycle << " mul_inv_inf " << se->getString() << ' '
-        // << m_infectivity << '\n';
         if (m_cycle == LOOPBEGIN) {
 
             m_infectivity = std::stof(se->getString());
@@ -137,7 +85,6 @@ void plague::mul_inv_sev(SST::Event *ev) {
     auto *se = dynamic_cast<SST::Interfaces::StringEvent *>(ev);
     if (se && m_keep_recv) {
 
-        std::cout << m_cycle << " mul_inv_sev " << se->getString() << '\n';
         m_severity = std::stof(se->getString());
 
     }
@@ -159,18 +106,6 @@ void plague::mul_inv_rsrch(SST::Event *ev) {
 
 }
 
-// void plague::mul_inv_sev(SST::Event *ev) {
-
-//     auto *se = dynamic_cast<SST::Interfaces::StringEvent *>(ev);
-//     if (se && m_keep_recv) {
-//         // m_severity = std::stof(se->getString());
-//         std::cout << m_cycle << " mul_inv_sev " << m_severity << '\n';
-//     }
-
-//     delete se;
-
-// }
-
 void plague::mul_inv_br(SST::Event *ev) {
 
     auto *se = dynamic_cast<SST::Interfaces::StringEvent *>(ev);
@@ -187,7 +122,7 @@ void plague::floor_cure_thresh(SST::Event *ev) {
     auto *se = dynamic_cast<SST::Interfaces::StringEvent *>(ev);
 
     if (se && m_keep_recv) {
-        m_cure_threshold = std::stoi(se->getString()) / std::stoi(m_limit);
+        m_cure_threshold = std::stoi(se->getString()) / m_limit;
     }
 
     delete se;
@@ -236,35 +171,6 @@ void plague::min_fat(SST::Event *ev) {
 
 }
 
-// void plague::mul_inv_inf(SST::Event *ev) {
-
-//     auto *se = dynamic_cast<SST::Interfaces::StringEvent *>(ev);
-//     bool _keep_send = m_cycle < SIMTIME - 1;
-//     bool _keep_recv = m_cycle < SIMTIME - 2;
-
-//     if (se && m_keep_recv) {
-
-//         if (m_cycle == LOOPBEGIN) {
-
-//             m_infectivity = std::stof(se->getString());
-
-//         } else {
-
-//             min_inf_din_link->send(new SST::Interfaces::StringEvent(
-//                     std::to_string(_keep_send) +
-//                     std::to_string(_keep_recv) +
-//                     align_signal_width(12, m_infectivity + std::stof(se->getString())) +
-//                     "0.25"
-//             ));
-
-//         }
-
-//     }
-
-//     delete se;
-
-// }
-
 void plague::min_inf(SST::Event *ev) {
 
     auto *se = dynamic_cast<SST::Interfaces::StringEvent *>(ev);
@@ -308,20 +214,6 @@ void plague::mul_pop_inf(SST::Event *ev) {
                 std::to_string(_keep_recv) +
                 align_signal_width(12, std::stof(se->getString()))
         ));
-
-    }
-
-    delete se;
-
-}
-
-void plague::rng_pop_inf(SST::Event *ev) {
-
-    auto *se = dynamic_cast<SST::Interfaces::StringEvent *>(ev);
-
-    if (se && m_cycle < LOOPEND) {
-
-        m_batch_infected = std::stoi(se->getString()) * m_cycle / std::stoi(m_limit) + 1;
 
     }
 
