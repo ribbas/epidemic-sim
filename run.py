@@ -25,8 +25,7 @@ def get_rand_tmp():
 plague_main = sst.Component(
     "Plague Simulation Driver", "plague.plague")
 plague_main.addParams({
-    "CLOCK": CLOCK,
-    "SEED": 1023,
+    "SEED": 8562,
 })
 
 

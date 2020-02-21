@@ -9,9 +9,8 @@
 plague::plague(SST::ComponentId_t id, SST::Params &params) :
         SST::Component(id),
         // Collect all the parameters from the project driver
-        m_clock(params.find<std::string>("CLOCK", "1Hz")),
-        seed_lim(params.find<uint16_t>("SEED", 0)),
-        m_gen(seed_lim),
+        seed(params.find<uint16_t>("SEED", 0)),
+        m_gen(seed),
         // initialize ram links
         flash_mem_din_link(configureLink("flash_mem_din")),
         flash_mem_dout_link(configureLink(
@@ -103,7 +102,7 @@ plague::plague(SST::ComponentId_t id, SST::Params &params) :
     m_output.init("\033[93mplague-" + getName() + "\033[0m -> ", 1, 0, SST::Output::STDOUT);
 
     // Just register a plain clock for this simple example
-    registerClock(m_clock, new SST::Clock::Handler<plague>(this, &plague::tick));
+    registerClock("1Hz", new SST::Clock::Handler<plague>(this, &plague::tick));
 
     registerAsPrimaryComponent();
     primaryComponentDoNotEndSim();

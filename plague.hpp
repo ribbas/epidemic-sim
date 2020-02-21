@@ -102,11 +102,13 @@ public:
 private:
 
     // SST parameters
-    std::string m_clock;
-    uint16_t seed_lim;
+    uint16_t seed;
+
+    // RNG attributes
     std::mt19937 m_gen;
     std::uniform_int_distribution<unsigned int> m_dis;
 
+    // SST attributes
     SST::Output m_output;
     SST::Link *flash_mem_din_link, *flash_mem_dout_link,
             *mutation_din_link, *mutation_dout_link,
@@ -123,20 +125,21 @@ private:
             *min_fat_din_link, *min_fat_dout_link,
             *min_inf_din_link, *min_inf_dout_link;
 
-    unsigned int SIMTIME = 50000;
+    // main loop attributes
+    unsigned int SIMTIME = 10000;
     unsigned int LOOPBEGIN = 2;
     unsigned int LOOPEND = (SIMTIME - 2);
+    unsigned int m_cycle{};
     bool m_keep_send{}, m_keep_recv{};
+    bool m_mutate_lock = false, m_loop_lock = true, m_mem_read_flag = false;
 
+    // simulation values
     unsigned int m_limit{}, m_cure_threshold{}, m_batch_infected{}, m_total_infected{}, m_total_infected_today{}, m_total_dead_today{}, m_gene{};
     float m_severity{}, m_infectivity{}, m_fatality{}, m_birth_rate{}, m_cure{}, m_research{};
     std::string m_mutation = "0";
-    bool m_mutate_lock = false, m_loop_lock = true, m_mem_read_flag = false;
 
     // flash memory variables
     std::string m_mem_read = "101", m_mem_write = "111", m_mem_data_out;
-
-    unsigned int m_cycle{};
     FILE *m_fp{};
 
 };
