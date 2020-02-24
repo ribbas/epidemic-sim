@@ -18,7 +18,7 @@ generate:
 
 .PHONY: install
 .ONESHELL:
-install:
+install: generate
 	mkdir -p build
 	cd build && cmake -DCMAKE_CXX_COMPILER=${CXX} .. && $(MAKE)
 	mv ../chisel/blackboxes/build.sbt .
@@ -36,11 +36,12 @@ run-sst:
 
 .PHONY: stats
 stats:
-	@python stats/parsemem.py build/memory_dump.txt ${SEED}
+	@mkdir -p data
+	@python stats/parsemem.py build/${SEED}.txt ${SEED}
 
 .PHONY: plot
 plot:
-	@python stats/plot.py ${SEED}.json
+	@python stats/plot.py data/${SEED}.json
 
 .PHONY: clean
 # unregister SST components and remove all compiled objects and cached files

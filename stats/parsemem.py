@@ -86,5 +86,5 @@ if __name__ == "__main__":
         stats["days"] = int(addr) - 5
 
     print(f"Cure started on {stats['cure_started_date']}")
-    with open(sys.argv[2] + ".json", "w") as stats_dump_file:
+    with open(f"data/{sys.argv[2]}.json", "w") as stats_dump_file:
         json.dump(stats, stats_dump_file)

@@ -25,7 +25,5 @@ dist/
 *.egg-info/
 blackboxes/
 
-*.json
-
 target/
 test_run_dir/

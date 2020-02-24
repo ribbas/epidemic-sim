@@ -129,7 +129,7 @@ bool plague::tick(SST::Cycle_t current_cycle) {
             std::cout << current_cycle << " Reading Memory...\n";
             m_mem_read_flag = true;
             SIMTIME = current_cycle * 2;
-            m_fp = std::fopen("memory_dump.txt", "w");
+            m_fp = std::fopen((std::to_string(seed) + ".txt").c_str(), "w");
 
         }
 
@@ -254,8 +254,8 @@ bool plague::tick(SST::Cycle_t current_cycle) {
 
         } else if (float_less_than(m_cure, 100.00)) {
 
-            m_output.verbose(CALL_INFO, 1, 0, " %6lu | %6.2f | %8d | %8d\n", current_cycle,
-                             m_cure, m_total_infected_today, m_total_dead_today);
+            // m_output.verbose(CALL_INFO, 1, 0, " %6lu | %6.2f | %8d | %8d\n", current_cycle,
+            //                  m_cure, m_total_infected_today, m_total_dead_today);
 
             std::string _pop_inf = std::to_string(m_total_infected_today);
             std::string _pop_dead = std::to_string(m_total_dead_today);
