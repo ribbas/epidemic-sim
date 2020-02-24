@@ -4,6 +4,7 @@
 import os
 from random import SystemRandom
 from string import ascii_uppercase, digits
+import sys
 
 import sst
 
@@ -25,7 +26,7 @@ def get_rand_tmp():
 plague_main = sst.Component(
     "Plague Simulation Driver", "plague.plague")
 plague_main.addParams({
-    "SEED": 8562,
+    "SEED": int(sys.argv[1]),
 })
 
 

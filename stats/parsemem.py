@@ -27,7 +27,7 @@ if __name__ == "__main__":
         }
     }
 
-    with open(sys.argv[-1]) as mem_dump_file:
+    with open(sys.argv[1]) as mem_dump_file:
 
         stats_dump = False
         stats_line = 0
@@ -86,5 +86,5 @@ if __name__ == "__main__":
         stats["days"] = int(addr) - 5
 
     print(f"Cure started on {stats['cure_started_date']}")
-    with open("data.json", "w") as stats_dump_file:
+    with open(sys.argv[2] + ".json", "w") as stats_dump_file:
         json.dump(stats, stats_dump_file)
