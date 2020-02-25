@@ -34,6 +34,7 @@ if __name__ == "__main__":
         ))
         fig.add_shape({
             "type": "line",
+            "name": "cure started date",
             "x0": cure_started_date,
             "y0": 0,
             "x1": cure_started_date,

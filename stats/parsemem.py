@@ -45,7 +45,8 @@ if __name__ == "__main__":
             pop_inf, pop_dead, cure = int(data[0:3]), int(data[3:6]), int(data[6:8])
             if not stats["cure_started_day"] and cure:
                 stats["cure_started_day"] = int(addr)
-                stats["cure_started_date"] = (today + datetime.timedelta(stats["cure_started_day"])).isoformat()
+                stats["cure_started_date"] = (
+                    today + datetime.timedelta(stats["cure_started_day"])).isoformat()
 
             if not stats_dump and cure == 99:
                 stats_dump = True
