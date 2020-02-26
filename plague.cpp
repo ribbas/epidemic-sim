@@ -54,11 +54,11 @@ bool plague::tick(SST::Cycle_t current_cycle) {
 
         if (current_cycle == 1) {
 
-            m_output.verbose(CALL_INFO, 1, 0, "----------------------------------------\n");
-            m_output.verbose(CALL_INFO, 1, 0, "--------- SIMULATION INITIATED ---------\n");
-            m_output.verbose(CALL_INFO, 1, 0, "----------------------------------------\n");
-            m_output.verbose(CALL_INFO, 1, 0, "   Day  |  Cure  | Infected | Dead\n");
-            m_output.verbose(CALL_INFO, 1, 0, "--------+--------+----------+---------\n");
+            // m_output.verbose(CALL_INFO, 1, 0, "----------------------------------------\n");
+            // m_output.verbose(CALL_INFO, 1, 0, "--------- SIMULATION INITIATED ---------\n");
+            // m_output.verbose(CALL_INFO, 1, 0, "----------------------------------------\n");
+            // m_output.verbose(CALL_INFO, 1, 0, "   Day  |  Cure  | Infected | Dead\n");
+            // m_output.verbose(CALL_INFO, 1, 0, "--------+--------+----------+---------\n");
 
             // random int between 100 and 1023
             m_dis.param(std::uniform_int_distribution<unsigned int>::param_type(100, 1023));

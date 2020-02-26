@@ -49,7 +49,7 @@ clean:
 	@$(call iecho,"Unregistering components...")
 	sst-register -u plague-sim
 	@$(call iecho,"Removing cached files...")
-	find . \( -name "*.pyc" -o -name "*.json" \) -type f -delete
+	find . -name "*.pyc" -type f -delete
 	find . \( -name "__pycache__" -o -name "cmake-build-debug" \) -type d -exec rm -rf {} +
 	@$(call iecho,"Removing black boxes and build files...")
 	find . \( -name "blackboxes" -o -name "build" \) -type d -exec rm -rf {} +

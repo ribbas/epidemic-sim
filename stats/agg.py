@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 
 import json
-import statistics
 from os import listdir, path
+import statistics
 import sys
 
 data_dir = sys.argv[1]
@@ -18,7 +18,7 @@ stat_features = [
     "total_dead",
     "days",
 ]
-AGG_STATS = {feature: [x for x in range(48)] for feature in stat_features}
+AGG_STATS = {feature: [x for x in range(113)] for feature in stat_features}
 
 
 def attr_with_index(attr, data):
@@ -30,8 +30,11 @@ def attr_with_index(attr, data):
 for f in listdir(data_dir):
     with open(path.join(data_dir, f)) as data_file:
         data = json.load(data_file)
-        for feature in stat_features:
-            AGG_STATS[feature][int(f[:-5])] = data[feature]
+        try:
+            for feature in stat_features:
+                AGG_STATS[feature][int(f[:-5])] = data[feature]
+        except IndexError:
+            print(f)
 
 for feature in stat_features:
     print(feature)

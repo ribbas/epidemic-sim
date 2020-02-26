@@ -1,17 +1,23 @@
 #! /bin/sh
 
-make install
-for i in {0..36..12}; do
-    make run-sst stats SEED=$i &
-    make run-sst stats SEED=$((i+1)) &
-    make run-sst stats SEED=$((i+2)) &
-    make run-sst stats SEED=$((i+3)) &
-    make run-sst stats SEED=$((i+4)) &
-    make run-sst stats SEED=$((i+5)) &
-    make run-sst stats SEED=$((i+6)) &
-    make run-sst stats SEED=$((i+7)) &
-    make run-sst stats SEED=$((i+8)) &
-    make run-sst stats SEED=$((i+9)) &
-    make run-sst stats SEED=$((i+10)) &
-    make run-sst stats SEED=$((i+11))
+seed_begin=113
+seed_end=$((${seed_begin} + 12))
+make_cmd_str="make run-sst stats SEED"
+make_cmd="${make_cmd_str}=${seed_begin}"
+cpus=$(nproc --all)
+
+# make install
+while ((${seed_end} <= 200)); do
+    for seed in $(seq $((${seed_begin} + 1)) ${seed_end}); do
+        make_cmd+=" & ${make_cmd_str}=${seed}"
+    done
+    make_cmd+=";"
+    echo ${make_cmd}
+    # eval ${make_cmd}
+
+    seed_begin=$((${seed_end} + 1))
+    seed_end=$((${seed_begin} + 12))
+    make_cmd="${make_cmd_str}=${seed_begin}"
 done
+
+echo -e "\e[1;34mDONE\e[0m"
