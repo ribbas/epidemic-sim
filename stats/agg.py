@@ -18,7 +18,7 @@ stat_features = [
     "total_dead",
     "days",
 ]
-AGG_STATS = {feature: [x for x in range(490)] for feature in stat_features}
+AGG_STATS = {feature: [x for x in range(int(sys.argv[2]) + 1)] for feature in stat_features}
 
 
 def attr_with_index(attr, data):
@@ -36,6 +36,7 @@ for f in listdir(data_dir):
         except IndexError:
             print(f)
 
+# print(AGG_STATS["severity"].index(None))
 for feature in stat_features:
     print(feature)
     print("mean:", statistics.mean(AGG_STATS[feature]))

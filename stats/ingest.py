@@ -2,11 +2,10 @@
 # -*- coding: utf-8 -*-
 
 import json
-from os import listdir, path
-import statistics
+from os import listdir
 import sys
 
-file_range = range(0, 490)
+file_range = range(0, int(sys.argv[2]) + 1)
 data_dir = sys.argv[1]
 PENDING_FILES = []
 
