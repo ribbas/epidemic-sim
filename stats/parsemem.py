@@ -30,7 +30,7 @@ if __name__ == "__main__":
     with open(sys.argv[1]) as mem_dump_file:
 
         stats_dump = False
-        stats_line = 0
+        # stats_line = 0
 
         total_inf = 0
         total_dead = 0
@@ -51,17 +51,18 @@ if __name__ == "__main__":
             if not stats_dump and cure == 99:
                 stats_dump = True
             elif stats_dump and cure != 99:
-                if stats_line == 0:
-                    stats["severity"] = float("0." + data[1:])
-                elif stats_line == 1:
-                    stats["infectivity"] = float("0." + data[1:])
-                elif stats_line == 2:
-                    stats["fatality"] = float("0." + data[1:])
-                elif stats_line == 3:
-                    stats["birth_rate"] = float("0." + data[1:])
-                elif stats_line == 4:
-                    stats["cure_threshold"] = int(data)
-                stats_line += 1
+                for stats_line in range(5):
+                    if stats_line == 0:
+                        stats["severity"] = float("0." + data[1:])
+                    elif stats_line == 1:
+                        stats["infectivity"] = float("0." + data[1:])
+                    elif stats_line == 2:
+                        stats["fatality"] = float("0." + data[1:])
+                    elif stats_line == 3:
+                        stats["birth_rate"] = float("0." + data[1:])
+                    elif stats_line == 4:
+                        stats["cure_threshold"] = int(data)
+                    addr, data = mem_dump_file.readline().split()
 
             else:
                 total_inf += pop_inf

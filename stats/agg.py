@@ -18,7 +18,7 @@ stat_features = [
     "total_dead",
     "days",
 ]
-AGG_STATS = {feature: [x for x in range(113)] for feature in stat_features}
+AGG_STATS = {feature: [x for x in range(490)] for feature in stat_features}
 
 
 def attr_with_index(attr, data):

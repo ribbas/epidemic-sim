@@ -6,7 +6,7 @@ from os import listdir, path
 import statistics
 import sys
 
-file_range = range(0, 200)
+file_range = range(0, 490)
 data_dir = sys.argv[1]
 PENDING_FILES = []
 

@@ -1,13 +1,13 @@
 #! /bin/sh
 
-seed_begin=113
-seed_end=$((${seed_begin} + 12))
+ncpu=$(nproc --all)
+seed_begin=489
+seed_end=$((${seed_begin} + ${ncpu}))
 make_cmd_str="make run-sst stats SEED"
 make_cmd="${make_cmd_str}=${seed_begin}"
-cpus=$(nproc --all)
 
 # make install
-while ((${seed_end} <= 200)); do
+while ((${seed_end} <= 995)); do
     for seed in $(seq $((${seed_begin} + 1)) ${seed_end}); do
         make_cmd+=" & ${make_cmd_str}=${seed}"
     done
@@ -16,7 +16,7 @@ while ((${seed_end} <= 200)); do
     # eval ${make_cmd}
 
     seed_begin=$((${seed_end} + 1))
-    seed_end=$((${seed_begin} + 12))
+    seed_end=$((${seed_begin} + ${ncpu}))
     make_cmd="${make_cmd_str}=${seed_begin}"
 done
 
