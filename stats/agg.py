@@ -17,6 +17,20 @@ parser.add_argument("--dump", "-d", action="store_true", default=False)
 args = parser.parse_args().__dict__
 
 data_dir = args["path"]
+
+PENDING_FILES = []
+
+file_range = range(int(args["end_seed"]) + 1)
+
+for f in file_range:
+    if f"{f}.json" not in listdir(data_dir):
+        PENDING_FILES.append(str(f))
+
+with open("stats/pending.txt", "w") as pending_file:
+    print("Files pending:", PENDING_FILES)
+    pending_file.write("\n".join(PENDING_FILES))
+
+
 stat_features = [
     "severity",
     "infectivity",
@@ -28,7 +42,7 @@ stat_features = [
     "total_dead",
     "days",
 ]
-AGG_STATS = {feature: [x for x in range(int(args["end_seed"]) + 1)] for feature in stat_features}
+AGG_STATS = {feature: [x for x in file_range] for feature in stat_features}
 
 for f in listdir(data_dir):
     with open(path.join(data_dir, f)) as data_file:
@@ -54,27 +68,29 @@ if args["dump"]:
 
 if args["plot"]:
 
+    _text = [
+        f"Total infected: {total_inf}<br>" +
+        f"Total dead: {total_dead}<br>" +
+        f"Severity: {severity}<br>" +
+        f"Infectivity: {infectivity}<br>" +
+        f"Fatality: {fatality}<br>" +
+        f"Birth rate: {birth_rate}<br>" +
+        f"Cure threshold: {cure_threshold}<br>" +
+        f"Cure Started Day: {cure_started_day}<br>"
+        for severity, infectivity, fatality, birth_rate, cure_threshold,
+        cure_started_day, total_inf, total_dead, days,
+        in zip(*(AGG_STATS[feat] for feat in stat_features))
+    ]
     fig = make_subplots(
         rows=1, cols=2
     )
     fig.add_trace(
         go.Scatter(
+            x=AGG_STATS["cure_started_day"],
             y=AGG_STATS["total_inf"],
-            name="Total infected",
+            name="Total Population Infected vs Days Until Cure Started",
             hovertemplate="<b>%{text}</b>",
-            text=[
-                f"Total infected: {total_inf}<br>" +
-                f"Total dead: {total_dead}<br>" +
-                f"Severity: {severity}<br>" +
-                f"Infectivity: {infectivity}<br>" +
-                f"Fatality: {fatality}<br>" +
-                f"Birth rate: {birth_rate}<br>" +
-                f"Cure threshold: {cure_threshold}<br>" +
-                f"Cure Started Day: {cure_started_day}<br>"
-                for severity, infectivity, fatality, birth_rate, cure_threshold,
-                cure_started_day, total_inf, total_dead, days,
-                in zip(*(AGG_STATS[feat] for feat in stat_features))
-            ],
+            text=_text,
             line={"color": "rgb(255,154,0)"},
             mode="markers",
         ),
@@ -83,10 +99,16 @@ if args["plot"]:
     fig.add_trace(
         go.Box(
             y=AGG_STATS["total_inf"],
-            name="Total infected",
+            name="Distribution of Total Population Infected",
+            text=_text,
             boxpoints="all", jitter=0.3
         ),
         row=1, col=2
     )
-
+    fig.update_layout(
+        # title="Plot Title",
+        xaxis_title="Days Until Cure Started",
+        yaxis_title="Total Population Infected",
+        showlegend=False,
+    )
     fig.show()

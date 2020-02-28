@@ -18,7 +18,7 @@ generate:
 
 .PHONY: install
 .ONESHELL:
-install: generate
+install:
 	mkdir -p build
 	cd build && cmake -DCMAKE_CXX_COMPILER=${CXX} .. && $(MAKE)
 	mv ../chisel/blackboxes/build.sbt .

@@ -129,7 +129,7 @@ bool plague::tick(SST::Cycle_t current_cycle) {
             std::cout << current_cycle << " Reading Memory...\n";
             m_mem_read_flag = true;
             SIMTIME = current_cycle * 2;
-            m_fp = std::fopen(("../data/raw/" + std::to_string(seed) + ".txt").c_str(), "w");
+            m_fp = std::fopen((std::to_string(seed) + ".txt").c_str(), "w");
 
         }
 
