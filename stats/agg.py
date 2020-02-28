@@ -18,20 +18,22 @@ args = parser.parse_args().__dict__
 
 data_dir = args["path"]
 
-PENDING_FILES = []
+pending_files = []
 
 file_range = range(int(args["end_seed"]) + 1)
 
 for f in file_range:
     if f"{f}.json" not in listdir(data_dir):
-        PENDING_FILES.append(str(f))
+        pending_files.append(str(f))
 
-with open("stats/pending.txt", "w") as pending_file:
-    print("Files pending:", PENDING_FILES)
-    pending_file.write("\n".join(PENDING_FILES))
+if pending_files:
+    with open("stats/pending.txt", "w") as pending_file:
+        print(f"Files pending: {' '.join(pending_files)}")
+        pending_file.write("\n".join(pending_files))
 
 
 stat_features = [
+    "seed",
     "severity",
     "infectivity",
     "fatality",
@@ -47,9 +49,11 @@ AGG_STATS = {feature: [x for x in file_range] for feature in stat_features}
 for f in listdir(data_dir):
     with open(path.join(data_dir, f)) as data_file:
         data = json.load(data_file)
+        seed = int(f[:-5])
+        AGG_STATS["seed"][seed] = seed
         try:
-            for feature in stat_features:
-                AGG_STATS[feature][int(f[:-5])] = data[feature]
+            for feature in stat_features[1:]:
+                AGG_STATS[feature][seed] = data[feature]
         except IndexError:
             print(f)
 
@@ -60,7 +64,7 @@ if args["dump"]:
         value = attr(data)
         return value, data.index(value)
 
-    for feature in stat_features:
+    for feature in stat_features[1:]:
         print(feature)
         print("mean:", statistics.mean(AGG_STATS[feature]))
         print("min:", attr_with_index(min, AGG_STATS[feature]))
@@ -69,6 +73,7 @@ if args["dump"]:
 if args["plot"]:
 
     _text = [
+        f"Seed: {seed}<br>" +
         f"Total infected: {total_inf}<br>" +
         f"Total dead: {total_dead}<br>" +
         f"Severity: {severity}<br>" +
@@ -77,12 +82,12 @@ if args["plot"]:
         f"Birth rate: {birth_rate}<br>" +
         f"Cure threshold: {cure_threshold}<br>" +
         f"Cure Started Day: {cure_started_day}<br>"
-        for severity, infectivity, fatality, birth_rate, cure_threshold,
+        for seed, severity, infectivity, fatality, birth_rate, cure_threshold,
         cure_started_day, total_inf, total_dead, days,
         in zip(*(AGG_STATS[feat] for feat in stat_features))
     ]
     fig = make_subplots(
-        rows=1, cols=2
+        rows=1, cols=2, shared_yaxes=True, horizontal_spacing=0.02
     )
     fig.add_trace(
         go.Scatter(
