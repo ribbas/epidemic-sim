@@ -6,9 +6,6 @@ import json
 from os import listdir, path
 import statistics
 
-import plotly.graph_objs as go
-from plotly.subplots import make_subplots
-
 parser = ArgumentParser()
 parser.add_argument("path", type=str)
 parser.add_argument("end_seed", type=int, default=0)
@@ -72,6 +69,9 @@ if args["dump"]:
 
 if args["plot"]:
 
+    import plotly
+    from plotly.subplots import make_subplots
+
     _text = [
         f"Seed: {seed}<br>" +
         f"Total infected: {total_inf}<br>" +
@@ -87,10 +87,12 @@ if args["plot"]:
         in zip(*(AGG_STATS[feat] for feat in stat_features))
     ]
     fig = make_subplots(
-        rows=1, cols=2, shared_yaxes=True, horizontal_spacing=0.02
+        rows=1, cols=2,
+        column_widths=[0.75, 0.25],
+        shared_yaxes=True, horizontal_spacing=0.02
     )
     fig.add_trace(
-        go.Scatter(
+        plotly.graph_objs.Scatter(
             x=AGG_STATS["cure_started_day"],
             y=AGG_STATS["total_inf"],
             name="Total Population Infected vs Days Until Cure Started",
@@ -102,11 +104,11 @@ if args["plot"]:
         row=1, col=1
     )
     fig.add_trace(
-        go.Box(
+        plotly.graph_objs.Box(
             y=AGG_STATS["total_inf"],
             name="Distribution of Total Population Infected",
             text=_text,
-            boxpoints="all", jitter=0.3
+            jitter=0.3
         ),
         row=1, col=2
     )
@@ -116,4 +118,4 @@ if args["plot"]:
         yaxis_title="Total Population Infected",
         showlegend=False,
     )
-    fig.show()
+    plotly.offline.plot(fig, filename="stats/plot.html", auto_open=False)
