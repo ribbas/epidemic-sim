@@ -2,8 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from argparse import ArgumentParser
-import json
-from os import listdir, path
+import sqlite3
 import statistics
 
 parser = ArgumentParser()
@@ -14,21 +13,6 @@ parser.add_argument("--dump", "-d", action="store_true", default=False)
 args = parser.parse_args().__dict__
 
 data_dir = args["path"]
-
-pending_files = []
-
-file_range = range(int(args["end_seed"]) + 1)
-
-for f in file_range:
-    if f"{f}.json" not in listdir(data_dir):
-        pending_files.append(str(f))
-
-if pending_files:
-    with open("stats/pending.txt", "w") as pending_file:
-        print(f"Files pending: {' '.join(pending_files)}")
-        pending_file.write("\n".join(pending_files))
-
-
 stat_features = [
     "seed",
     "severity",
@@ -41,18 +25,17 @@ stat_features = [
     "total_dead",
     "days",
 ]
-AGG_STATS = {feature: [x for x in file_range] for feature in stat_features}
 
-for f in listdir(data_dir):
-    with open(path.join(data_dir, f)) as data_file:
-        data = json.load(data_file)
-        seed = int(f[:-5])
-        AGG_STATS["seed"][seed] = seed
-        try:
-            for feature in stat_features[1:]:
-                AGG_STATS[feature][seed] = data[feature]
-        except IndexError:
-            print(f)
+conn = sqlite3.connect(data_dir)
+
+db = []
+
+for row in conn.execute("SELECT * FROM STATS"):
+    db.append(dict(zip(stat_features, row)))
+
+db = {k: [d[k] for d in db if k in d] for k in stat_features}
+
+conn.close()
 
 if args["dump"]:
 
@@ -62,10 +45,12 @@ if args["dump"]:
         return value, data.index(value)
 
     for feature in stat_features[1:]:
+        print("---------------------------------------")
         print(feature)
-        print("mean:", statistics.mean(AGG_STATS[feature]))
-        print("min:", attr_with_index(min, AGG_STATS[feature]))
-        print("max:", attr_with_index(max, AGG_STATS[feature]))
+        print("mean:", statistics.mean(db[feature]))
+        print("min:", attr_with_index(min, db[feature]))
+        print("max:", attr_with_index(max, db[feature]))
+        print("---------------------------------------")
 
 if args["plot"]:
 
@@ -73,19 +58,19 @@ if args["plot"]:
     from plotly.subplots import make_subplots
 
     _text = [
-        f"Seed: {seed}<br>" +
-        f"Total infected: {total_inf}<br>" +
-        f"Total dead: {total_dead}<br>" +
-        f"Severity: {severity}<br>" +
-        f"Infectivity: {infectivity}<br>" +
-        f"Fatality: {fatality}<br>" +
-        f"Birth rate: {birth_rate}<br>" +
-        f"Cure threshold: {cure_threshold}<br>" +
-        f"Cure Started Day: {cure_started_day}<br>"
-        for seed, severity, infectivity, fatality, birth_rate, cure_threshold,
-        cure_started_day, total_inf, total_dead, days,
-        in zip(*(AGG_STATS[feat] for feat in stat_features))
+        f"Seed: {db['seed'][x]}<br>" +
+        f"Total infected: {db['total_inf'][x]}<br>" +
+        f"Total dead: {db['total_dead'][x]}<br>" +
+        f"Severity: {db['severity'][x]}<br>" +
+        f"Infectivity: {db['infectivity'][x]}<br>" +
+        f"Fatality: {db['fatality'][x]}<br>" +
+        f"Birth rate: {db['birth_rate'][x]}<br>" +
+        f"Cure threshold: {db['cure_threshold'][x]}<br>" +
+        f"Cure Started Day: {db['cure_started_day'][x]}<br>"
+        f"Days: {db['days'][x]}<br>"
+        for x in range(int(args["end_seed"]) + 1)
     ]
+
     fig = make_subplots(
         rows=1, cols=2,
         column_widths=[0.75, 0.25],
@@ -93,8 +78,8 @@ if args["plot"]:
     )
     fig.add_trace(
         plotly.graph_objs.Scatter(
-            x=AGG_STATS["cure_started_day"],
-            y=AGG_STATS["total_inf"],
+            x=db["cure_started_day"],
+            y=db["total_inf"],
             name="Total Population Infected vs Days Until Cure Started",
             hovertemplate="<b>%{text}</b>",
             text=_text,
@@ -105,7 +90,7 @@ if args["plot"]:
     )
     fig.add_trace(
         plotly.graph_objs.Box(
-            y=AGG_STATS["total_inf"],
+            y=db["total_inf"],
             name="Distribution of Total Population Infected",
             text=_text,
             jitter=0.3
