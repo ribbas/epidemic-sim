@@ -147,4 +147,18 @@ bool float_less_than(float a, float b) {
            ((std::fabs(a) < std::fabs(b) ? std::fabs(b) : std::fabs(a)) * std::numeric_limits<float>::epsilon());
 }
 
+void plague::write_stats_to_mem(std::string &ram_data, int cycle) {
+
+    std::string ram_addr = std::to_string(cycle);
+    align_signal_width(6, ram_addr);
+    flash_mem_din_link->send(new SST::Interfaces::StringEvent(
+            std::to_string(m_keep_send) +
+            std::to_string(m_keep_recv) +
+            ram_addr +
+            m_mem_write +
+            ram_data
+    ));
+
+}
+
 #endif

@@ -27,6 +27,8 @@ public:
 
     static std::string align_signal_width(int, float);
 
+    void write_stats_to_mem(std::string &, int);
+
     void flash_mem(SST::Event *);
 
     void mutation(SST::Event *);
