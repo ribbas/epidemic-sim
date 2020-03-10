@@ -1,10 +1,10 @@
-#ifndef PLAGUE_EVENT_DRIVERS_HPP
-#define PLAGUE_EVENT_DRIVERS_HPP
+#ifndef EPIDEMIC_EVENT_DRIVERS_HPP
+#define EPIDEMIC_EVENT_DRIVERS_HPP
 
-#include "plague.hpp"
+#include "epidemic.hpp"
 #include "setup.hpp"
 
-void plague::flash_mem(SST::Event *ev) {
+void epidemic::flash_mem(SST::Event *ev) {
 
     auto *se = dynamic_cast<SST::Interfaces::StringEvent *>(ev);
     if (se && m_mem_read_flag) {
@@ -22,7 +22,7 @@ void plague::flash_mem(SST::Event *ev) {
 
 }
 
-void plague::mutation(SST::Event *ev) {
+void epidemic::mutation(SST::Event *ev) {
 
     auto *se = dynamic_cast<SST::Interfaces::StringEvent *>(ev);
     if (se && m_keep_recv) {
@@ -49,7 +49,7 @@ void plague::mutation(SST::Event *ev) {
 
 }
 
-void plague::mul_inv_inf(SST::Event *ev) {
+void epidemic::mul_inv_inf(SST::Event *ev) {
 
     auto *se = dynamic_cast<SST::Interfaces::StringEvent *>(ev);
     bool _keep_send = m_cycle < SIMTIME - 1;
@@ -78,7 +78,7 @@ void plague::mul_inv_inf(SST::Event *ev) {
 
 }
 
-void plague::mul_inv_sev(SST::Event *ev) {
+void epidemic::mul_inv_sev(SST::Event *ev) {
 
     auto *se = dynamic_cast<SST::Interfaces::StringEvent *>(ev);
     if (se && m_keep_recv) {
@@ -91,7 +91,7 @@ void plague::mul_inv_sev(SST::Event *ev) {
 
 }
 
-void plague::mul_inv_br(SST::Event *ev) {
+void epidemic::mul_inv_br(SST::Event *ev) {
 
     auto *se = dynamic_cast<SST::Interfaces::StringEvent *>(ev);
     if (se && m_keep_recv) {
@@ -102,7 +102,7 @@ void plague::mul_inv_br(SST::Event *ev) {
 
 }
 
-void plague::mul_inv_rsrch(SST::Event *ev) {
+void epidemic::mul_inv_rsrch(SST::Event *ev) {
 
     auto *se = dynamic_cast<SST::Interfaces::StringEvent *>(ev);
     if (se && m_keep_recv) {
@@ -115,7 +115,7 @@ void plague::mul_inv_rsrch(SST::Event *ev) {
 
 }
 
-void plague::floor_cure_thresh(SST::Event *ev) {
+void epidemic::floor_cure_thresh(SST::Event *ev) {
 
     auto *se = dynamic_cast<SST::Interfaces::StringEvent *>(ev);
 
@@ -127,7 +127,7 @@ void plague::floor_cure_thresh(SST::Event *ev) {
 
 }
 
-void plague::mul_inv_fat(SST::Event *ev) {
+void epidemic::mul_inv_fat(SST::Event *ev) {
 
     auto *se = dynamic_cast<SST::Interfaces::StringEvent *>(ev);
     bool _keep_send = m_cycle < SIMTIME - 1;
@@ -156,7 +156,7 @@ void plague::mul_inv_fat(SST::Event *ev) {
 
 }
 
-void plague::min_fat(SST::Event *ev) {
+void epidemic::min_fat(SST::Event *ev) {
 
     auto *se = dynamic_cast<SST::Interfaces::StringEvent *>(ev);
     if (se && m_cycle < LOOPEND) {
@@ -169,7 +169,7 @@ void plague::min_fat(SST::Event *ev) {
 
 }
 
-void plague::min_inf(SST::Event *ev) {
+void epidemic::min_inf(SST::Event *ev) {
 
     auto *se = dynamic_cast<SST::Interfaces::StringEvent *>(ev);
     bool _keep_send = m_cycle < SIMTIME - 2;
@@ -199,7 +199,7 @@ void plague::min_inf(SST::Event *ev) {
 
 }
 
-void plague::mul_pop_inf(SST::Event *ev) {
+void epidemic::mul_pop_inf(SST::Event *ev) {
 
     auto *se = dynamic_cast<SST::Interfaces::StringEvent *>(ev);
     bool _keep_send = m_cycle < SIMTIME - 3;
@@ -219,7 +219,7 @@ void plague::mul_pop_inf(SST::Event *ev) {
 
 }
 
-void plague::floor_pop_inf(SST::Event *ev) {
+void epidemic::floor_pop_inf(SST::Event *ev) {
 
     auto *se = dynamic_cast<SST::Interfaces::StringEvent *>(ev);
     bool _keep_send = m_cycle < SIMTIME - 4;
@@ -244,7 +244,7 @@ void plague::floor_pop_inf(SST::Event *ev) {
 
 }
 
-void plague::mul_pop_dead(SST::Event *ev) {
+void epidemic::mul_pop_dead(SST::Event *ev) {
 
     auto *se = dynamic_cast<SST::Interfaces::StringEvent *>(ev);
     bool _keep_send = m_cycle < SIMTIME - 4;
@@ -264,7 +264,7 @@ void plague::mul_pop_dead(SST::Event *ev) {
 
 }
 
-void plague::floor_pop_dead(SST::Event *ev) {
+void epidemic::floor_pop_dead(SST::Event *ev) {
 
     auto *se = dynamic_cast<SST::Interfaces::StringEvent *>(ev);
 

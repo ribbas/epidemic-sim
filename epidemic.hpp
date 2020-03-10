@@ -1,5 +1,5 @@
-#ifndef PLAGUE_HPP
-#define PLAGUE_HPP
+#ifndef EPIDEMIC_HPP
+#define EPIDEMIC_HPP
 
 #include <random>
 
@@ -9,11 +9,11 @@
 
 #define POPULATION_TOTAL 7760000000
 
-class plague : public SST::Component {
+class epidemic : public SST::Component {
 
 public:
 
-    plague(SST::ComponentId_t, SST::Params &);
+    epidemic(SST::ComponentId_t, SST::Params &);
 
     void setup() override;
 
@@ -58,11 +58,11 @@ public:
     void mul_pop_dead(SST::Event *);
 
     SST_ELI_REGISTER_COMPONENT(
-            plague,
-            "plague",
-            "plague",
+            epidemic,
+            "epidemic",
+            "epidemic",
             SST_ELI_ELEMENT_VERSION(1, 0, 0),
-            "Simulator for the plague",
+            "Simulator for the epidemic",
             COMPONENT_CATEGORY_UNCATEGORIZED
     )
 

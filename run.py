@@ -23,9 +23,9 @@ def get_rand_tmp():
 
 # Main SST component
 ###############################################################################
-plague_main = sst.Component(
-    "Plague Simulation Driver", "plague.plague")
-plague_main.addParams({
+epidemic_main = sst.Component(
+    "Epidemic Simulation Driver", "epidemic.epidemic")
+epidemic_main.addParams({
     "SEED": int(sys.argv[1]),
 })
 
@@ -34,7 +34,7 @@ plague_main.addParams({
 ###############################################################################
 # Multiplicative inverse components
 mul_inv_sev_comp = sst.Component(
-    "Severity Multiplicative Inverse Component (SystemC)", "plague.mul_inv")
+    "Severity Multiplicative Inverse Component (SystemC)", "epidemic.mul_inv")
 mul_inv_sev_comp.addParams({
     "clock": CLOCK,
     "proc": os.path.join(BASE_PATH, "mul_inv.o"),
@@ -42,7 +42,7 @@ mul_inv_sev_comp.addParams({
 })
 
 mul_inv_inf_comp = sst.Component(
-    "Infectivity Multiplicative Inverse Component (SystemC)", "plague.mul_inv")
+    "Infectivity Multiplicative Inverse Component (SystemC)", "epidemic.mul_inv")
 mul_inv_inf_comp.addParams({
     "clock": CLOCK,
     "proc": os.path.join(BASE_PATH, "mul_inv.o"),
@@ -50,7 +50,7 @@ mul_inv_inf_comp.addParams({
 })
 
 mul_inv_fat_comp = sst.Component(
-    "Fatality Multiplicative Inverse Component (SystemC)", "plague.mul_inv")
+    "Fatality Multiplicative Inverse Component (SystemC)", "epidemic.mul_inv")
 mul_inv_fat_comp.addParams({
     "clock": CLOCK,
     "proc": os.path.join(BASE_PATH, "mul_inv.o"),
@@ -58,7 +58,7 @@ mul_inv_fat_comp.addParams({
 })
 
 mul_inv_br_comp = sst.Component(
-    "Birth Rate Multiplicative Inverse Component (SystemC)", "plague.mul_inv")
+    "Birth Rate Multiplicative Inverse Component (SystemC)", "epidemic.mul_inv")
 mul_inv_br_comp.addParams({
     "clock": CLOCK,
     "proc": os.path.join(BASE_PATH, "mul_inv.o"),
@@ -66,7 +66,7 @@ mul_inv_br_comp.addParams({
 })
 
 mul_inv_rsrch_comp = sst.Component(
-    "Research Multiplicative Inverse Component (SystemC)", "plague.mul_inv")
+    "Research Multiplicative Inverse Component (SystemC)", "epidemic.mul_inv")
 mul_inv_rsrch_comp.addParams({
     "clock": CLOCK,
     "proc": os.path.join(BASE_PATH, "mul_inv.o"),
@@ -75,7 +75,7 @@ mul_inv_rsrch_comp.addParams({
 
 # Floor components
 floor_cure_thresh_comp = sst.Component(
-    "Floor Component for Cure Threshold (SystemC)", "plague.sc_floor")
+    "Floor Component for Cure Threshold (SystemC)", "epidemic.sc_floor")
 floor_cure_thresh_comp.addParams({
     "clock": CLOCK,
     "proc": os.path.join(BASE_PATH, "sc_floor.o"),
@@ -83,7 +83,7 @@ floor_cure_thresh_comp.addParams({
 })
 
 floor_pop_inf_comp = sst.Component(
-    "Floor Component for Infected Population (SystemC)", "plague.sc_floor")
+    "Floor Component for Infected Population (SystemC)", "epidemic.sc_floor")
 floor_pop_inf_comp.addParams({
     "clock": CLOCK,
     "proc": os.path.join(BASE_PATH, "sc_floor.o"),
@@ -91,7 +91,7 @@ floor_pop_inf_comp.addParams({
 })
 
 floor_pop_dead_comp = sst.Component(
-    "Floor Component for Dead Population (SystemC)", "plague.sc_floor")
+    "Floor Component for Dead Population (SystemC)", "epidemic.sc_floor")
 floor_pop_dead_comp.addParams({
     "clock": CLOCK,
     "proc": os.path.join(BASE_PATH, "sc_floor.o"),
@@ -100,7 +100,7 @@ floor_pop_dead_comp.addParams({
 
 # Multiplication components
 mul_pop_inf_comp = sst.Component(
-    "Population Infected Multiplication Component (SystemC)", "plague.sc_mul")
+    "Population Infected Multiplication Component (SystemC)", "epidemic.sc_mul")
 mul_pop_inf_comp.addParams({
     "clock": CLOCK,
     "proc": os.path.join(BASE_PATH, "sc_mul.o"),
@@ -108,7 +108,7 @@ mul_pop_inf_comp.addParams({
 })
 
 mul_pop_dead_comp = sst.Component(
-    "Population Dead Multiplication Component (SystemC)", "plague.sc_mul")
+    "Population Dead Multiplication Component (SystemC)", "epidemic.sc_mul")
 mul_pop_dead_comp.addParams({
     "clock": CLOCK,
     "proc": os.path.join(BASE_PATH, "sc_mul.o"),
@@ -117,7 +117,7 @@ mul_pop_dead_comp.addParams({
 
 # Minimum float components
 minf_fat_comp = sst.Component(
-    "Minimum Float Fatality Component (SystemC)", "plague.minf")
+    "Minimum Float Fatality Component (SystemC)", "epidemic.minf")
 minf_fat_comp.addParams({
     "clock": CLOCK,
     "proc": os.path.join(BASE_PATH, "minf.o"),
@@ -125,7 +125,7 @@ minf_fat_comp.addParams({
 })
 
 minf_inf_comp = sst.Component(
-    "Minimum Float Infectivity Component (SystemC)", "plague.minf")
+    "Minimum Float Infectivity Component (SystemC)", "epidemic.minf")
 minf_inf_comp.addParams({
     "clock": CLOCK,
     "proc": os.path.join(BASE_PATH, "minf.o"),
@@ -135,7 +135,7 @@ minf_inf_comp.addParams({
 # Chisel components
 ###############################################################################
 flash_mem_comp = sst.Component(
-    "Memory Component (Chisel)", "plague.flash_mem")
+    "Memory Component (Chisel)", "epidemic.flash_mem")
 flash_mem_comp.addParams({
     "clock": CLOCK,
     "proc": "test:runMain flash_mem.flash_memMain",
@@ -146,7 +146,7 @@ flash_mem_comp.addParams({
 ###############################################################################
 print(os.path.join(BASE_PATH, "../pyrtl/blackboxes/mutation_driver.py"))
 mutation_comp = sst.Component(
-    "Gene Mutation Component (PyRTL)", "plague.mutation")
+    "Gene Mutation Component (PyRTL)", "epidemic.mutation")
 mutation_comp.addParams({
     "clock": CLOCK,
     "proc": os.path.join(BASE_PATH, "../pyrtl/blackboxes/mutation_driver.py"),
@@ -166,22 +166,22 @@ def connect_comps(comp, main_comp, comp_name, main_comp_name):
 
 
 # connect the subcomponents
-connect_comps(mul_inv_sev_comp, plague_main, "mul_inv", "mul_inv_sev")
-connect_comps(mul_inv_inf_comp, plague_main, "mul_inv", "mul_inv_inf")
-connect_comps(mul_inv_fat_comp, plague_main, "mul_inv", "mul_inv_fat")
-connect_comps(mul_inv_br_comp, plague_main, "mul_inv", "mul_inv_br")
-connect_comps(mul_inv_rsrch_comp, plague_main, "mul_inv", "mul_inv_rsrch")
+connect_comps(mul_inv_sev_comp, epidemic_main, "mul_inv", "mul_inv_sev")
+connect_comps(mul_inv_inf_comp, epidemic_main, "mul_inv", "mul_inv_inf")
+connect_comps(mul_inv_fat_comp, epidemic_main, "mul_inv", "mul_inv_fat")
+connect_comps(mul_inv_br_comp, epidemic_main, "mul_inv", "mul_inv_br")
+connect_comps(mul_inv_rsrch_comp, epidemic_main, "mul_inv", "mul_inv_rsrch")
 
-connect_comps(minf_fat_comp, plague_main, "minf", "min_fat")
-connect_comps(minf_inf_comp, plague_main, "minf", "min_inf")
+connect_comps(minf_fat_comp, epidemic_main, "minf", "min_fat")
+connect_comps(minf_inf_comp, epidemic_main, "minf", "min_inf")
 
-connect_comps(floor_cure_thresh_comp, plague_main, "sc_floor", "floor_cure_thresh")
-connect_comps(floor_pop_inf_comp, plague_main, "sc_floor", "floor_pop_inf")
-connect_comps(floor_pop_dead_comp, plague_main, "sc_floor", "floor_pop_dead")
+connect_comps(floor_cure_thresh_comp, epidemic_main, "sc_floor", "floor_cure_thresh")
+connect_comps(floor_pop_inf_comp, epidemic_main, "sc_floor", "floor_pop_inf")
+connect_comps(floor_pop_dead_comp, epidemic_main, "sc_floor", "floor_pop_dead")
 
-connect_comps(mul_pop_inf_comp, plague_main, "sc_mul", "mul_pop_inf")
-connect_comps(mul_pop_dead_comp, plague_main, "sc_mul", "mul_pop_dead")
+connect_comps(mul_pop_inf_comp, epidemic_main, "sc_mul", "mul_pop_inf")
+connect_comps(mul_pop_dead_comp, epidemic_main, "sc_mul", "mul_pop_dead")
 
-connect_comps(flash_mem_comp, plague_main, "flash_mem", "flash_mem")
+connect_comps(flash_mem_comp, epidemic_main, "flash_mem", "flash_mem")
 
-connect_comps(mutation_comp, plague_main, "mutation", "mutation")
+connect_comps(mutation_comp, epidemic_main, "mutation", "mutation")

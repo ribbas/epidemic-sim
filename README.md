@@ -1,6 +1,6 @@
-# plague-inc-sim
+# epidemic-sim
 
-## Operations
+<!-- ## Operations
 
 ### Total
 
@@ -35,3 +35,4 @@
 |`gt`       |2          |
 |`exp`      |2          |
 |`rand`     |7          |
+ -->

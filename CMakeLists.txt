@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.12)
-project(plague CXX)
+project(epidemic CXX)
 include(../../tests/CMakeLists.txt)
 
 # add compiler warnings
@@ -20,8 +20,8 @@ endforeach ()
 
 # -------------------- SST EXECUTABLES --------------------
 add_executable(
-        libplague.so
-        plague.cpp
+        libepidemic.so
+        epidemic.cpp
         chisel/blackboxes/flash_mem_comp.cpp
         pyrtl/blackboxes/mutation_comp.cpp
         systemc/blackboxes/mul_inv_comp.cpp
@@ -29,5 +29,5 @@ add_executable(
         systemc/blackboxes/sc_floor_comp.cpp
         systemc/blackboxes/sc_mul_comp.cpp
 )
-_sst_compile_link(libplague.so)
+_sst_compile_link(libepidemic.so)
 # -------------------- SST EXECUTABLES --------------------

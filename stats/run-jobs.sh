@@ -3,7 +3,7 @@
 ncpu=$(nproc --all)
 seed_begin=2055
 seed_end=$((${seed_begin} + ${ncpu}))
-make_cmd_str="make run-sst stats SEED"
+make_cmd_str="make run stats SEED"
 make_cmd="${make_cmd_str}=${seed_begin}"
 
 # array=()

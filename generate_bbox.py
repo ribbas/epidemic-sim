@@ -8,7 +8,7 @@ from boilerplate import Chisel, PyRTL, SystemC
 if __name__ == "__main__":
 
     ARGS = {
-        "lib": "plague",
+        "lib": "epidemic",
         "module_dir": "../",
         "ipc": "sock",
         "lib_dir": "../../../../sit/",

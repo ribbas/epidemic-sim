@@ -1,8 +1,8 @@
-#include "plague.hpp"
+#include "epidemic.hpp"
 #include "event_drivers.hpp"
 #include "setup.hpp"
 
-bool plague::tick(SST::Cycle_t current_cycle) {
+bool epidemic::tick(SST::Cycle_t current_cycle) {
 
     m_keep_send = current_cycle < SIMTIME;
     m_keep_recv = current_cycle < SIMTIME - 1;
