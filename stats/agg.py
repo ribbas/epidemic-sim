@@ -30,7 +30,7 @@ conn = sqlite3.connect(data_dir)
 
 db = []
 
-for row in conn.execute("SELECT * FROM STATS"):
+for row in conn.execute("SELECT * FROM STATS WHERE SEED < 2048"):
     db.append(dict(zip(stat_features, row)))
 
 db = {k: [d[k] for d in db if k in d] for k in stat_features}
@@ -48,6 +48,7 @@ if args["dump"]:
         print("---------------------------------------")
         print(feature)
         print("mean:", statistics.mean(db[feature]))
+        print("median:", statistics.median(db[feature]))
         print("min:", attr_with_index(min, db[feature]))
         print("max:", attr_with_index(max, db[feature]))
         print("---------------------------------------")
