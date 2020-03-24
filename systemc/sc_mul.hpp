@@ -3,7 +3,7 @@
 #include <systemc.h>
 
 SC_MODULE(sc_mul) {
-    sc_in<sc_uint<10> > operandi;
+    sc_in<sc_uint<11> > operandi;
     sc_in<float> operandf;
     sc_out<float> data_out;
 

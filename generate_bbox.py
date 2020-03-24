@@ -34,11 +34,11 @@ if __name__ == "__main__":
             module="sc_mul",
         )
         sc_mul.set_ports((
-            ("input", "operandi", "<sc_uint<10>>"),
+            ("input", "operandi", "<sc_uint<11>>"),
             ("input", "operandf", "<float>", 12),
             ("output", "data_out", "<float>", 12),
         ))
-        sc_mul.fixed_width_float_output(9)
+        sc_mul.fixed_width_float_output(8)
         sc_mul.disable_runtime_warnings(["SC_ID_NO_SC_START_ACTIVITY_"])
         sc_mul.generate_bbox()
 

@@ -28,7 +28,7 @@ bool epidemic::tick(SST::Cycle_t current_cycle) {
         if (m_total_infected > m_cure_threshold) {
 
             // random int between 2 and 100
-            m_dis.param(std::uniform_int_distribution<unsigned int>::param_type(2, 100));
+            m_dis.param(std::uniform_int_distribution<unsigned int>::param_type(2, 10));
             rand_int_str = std::to_string(m_dis(m_gen));
             align_signal_width(4, rand_int_str);
 
@@ -119,8 +119,9 @@ bool epidemic::tick(SST::Cycle_t current_cycle) {
             ));
 
             // random int between 1 and 10
-            m_dis.param(std::uniform_int_distribution<unsigned int>::param_type(1, 10));
-            m_batch_infected = m_dis(m_gen) * current_cycle / m_limit + 1;
+            int m_batch_infected_lower_limit = std::min((int) current_cycle, 1997);
+            m_dis.param(std::uniform_int_distribution<unsigned int>::param_type(m_batch_infected_lower_limit, 1998));
+            m_batch_infected = m_dis(m_gen);
 
         }
 
@@ -206,6 +207,9 @@ bool epidemic::tick(SST::Cycle_t current_cycle) {
             align_signal_width(8, ram_data);
             write_stats_to_mem(ram_data, current_cycle + 4);
 
+            char factor = std::to_string(m_severity).back();
+
+            m_output.verbose(CALL_INFO, 1, 0, "Factor: %d\n", factor == '0' ? 1 : (int) factor - 48);
             m_output.verbose(CALL_INFO, 1, 0, "Severity: %f\n", m_severity);
             m_output.verbose(CALL_INFO, 1, 0, "Infectivity: %f\n", m_infectivity);
             m_output.verbose(CALL_INFO, 1, 0, "Fatality: %f\n", m_fatality);
@@ -223,7 +227,7 @@ bool epidemic::tick(SST::Cycle_t current_cycle) {
             align_signal_width(3, _pop_inf);
             align_signal_width(3, _pop_dead);
             align_signal_width(2, _cure);
-            ram_data = _pop_inf + _pop_dead + _cure;
+            ram_data = _pop_dead + _pop_inf + _cure;
             ram_addr = current_cycle_str;
             align_signal_width(6, ram_addr);
 

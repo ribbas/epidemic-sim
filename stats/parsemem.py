@@ -42,7 +42,7 @@ if __name__ == "__main__":
 
         for line in mem_dump_file:
             addr, data = line.split()
-            pop_inf, pop_dead, cure = int(data[0:3]), int(data[3:6]), int(data[6:8])
+            pop_dead, pop_inf, cure = int(data[0:3]), int(data[3:6]), int(data[6:8])
             if not stats["cure_started_day"] and cure:
                 stats["cure_started_day"] = int(addr)
                 stats["cure_started_date"] = (
@@ -54,6 +54,8 @@ if __name__ == "__main__":
                 for stats_line in range(5):
                     if stats_line == 0:
                         stats["severity"] = float("0." + data[1:])
+                        factor = int(data[-2])
+                        stats["factor"] = factor if factor else 1
                     elif stats_line == 1:
                         stats["infectivity"] = float("0." + data[1:])
                     elif stats_line == 2:

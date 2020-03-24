@@ -27,7 +27,7 @@ public:
 
     static std::string align_signal_width(int, float);
 
-    void write_stats_to_mem(std::string &, int);
+    void write_stats_to_mem(std::string &, unsigned int);
 
     void flash_mem(SST::Event *);
 
@@ -133,7 +133,7 @@ private:
     unsigned int LOOPEND = (SIMTIME - 2);
     unsigned int m_cycle{};
     bool m_keep_send{}, m_keep_recv{};
-    bool m_mutate_lock = false, m_loop_lock = true, m_mem_read_flag = false;
+    bool m_mutate_lock = false, m_loop_lock = true, m_mem_read_flag = false, m_eradicated = false;
 
     // simulation values
     unsigned int m_limit{}, m_cure_threshold{}, m_batch_infected{}, m_total_infected{}, m_total_infected_today{}, m_total_dead_today{}, m_gene{};

@@ -67,7 +67,7 @@ void epidemic::mul_inv_inf(SST::Event *ev) {
                     std::to_string(_keep_send) +
                     std::to_string(_keep_recv) +
                     align_signal_width(12, m_infectivity + std::stof(se->getString())) +
-                    "0.25"
+                    "0.50"
             ));
 
         }

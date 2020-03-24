@@ -12,13 +12,15 @@ if __name__ == "__main__":
         data = json.load(stats_dump_file)
 
         fig = go.Figure()
+        inf_totals = [data["factor"] * i for i in data["plot_data"]["inf_total"]]
+        dead_totals = [data["factor"] * i for i in data["plot_data"]["dead_total"]]
         fig.add_trace(go.Scatter(
-            x=data["plot_data"]["date"], y=data["plot_data"]["inf_total"],
+            x=data["plot_data"]["date"], y=inf_totals,
             name="population infected", fill="tozeroy",
             line={"color": "rgb(255,154,0)"}, mode="lines+markers"
         ))
         fig.add_trace(go.Scatter(
-            x=data["plot_data"]["date"], y=data["plot_data"]["dead_total"],
+            x=data["plot_data"]["date"], y=dead_totals,
             name="population dead", fill="tozeroy",
             line={"color": "rgb(255,0,0)"}, mode="lines+markers"
         ))
@@ -27,7 +29,7 @@ if __name__ == "__main__":
         cure_started_date = datetime.datetime.strptime(data["cure_started_date"], "%Y-%m-%d")
         cure_started_date_val = data["plot_data"]["inf_total"][-1]
         fig.add_trace(go.Scatter(
-            x=[cure_started_date + datetime.timedelta(80)],
+            x=[cure_started_date + datetime.timedelta(15)],
             y=[cure_started_date_val],
             text=["Cure started"],
             mode="text",

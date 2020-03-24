@@ -15,6 +15,7 @@ while CURE < 100.00:
 
         POPULATION_INFECTED = 0
         TOTAL_INFECTED = 0
+        TOTAL_DEAD = 0
         POPULATION_DEAD = 0
         BIRTH_RATE = 1 / random.randint(100, LIMIT)
         SEVERITY = 1 / random.randint(100, LIMIT)  # rate of detection
@@ -24,12 +25,12 @@ while CURE < 100.00:
 
     else:
 
-        INFECTIVITY = min(0.25, INFECTIVITY + (1 / random.randint(100, LIMIT)))
+        INFECTIVITY = min(0.50, INFECTIVITY + (1 / random.randint(100, LIMIT)))
         FATALITY = min(0.25, FATALITY + (1 / random.randint(100, LIMIT)))
 
         if TOTAL_INFECTED > CURE_THRESHOLD:
 
-            RESEARCH = 1 / random.randint(2, 100)
+            RESEARCH = 1 / random.randint(2, 10)
             CURE += RESEARCH
 
             MUTATED_GENE = random.randint(0, 8)
@@ -41,11 +42,12 @@ while CURE < 100.00:
             elif str(FATALITY)[-1] == str(MUTATED_GENE):
                 INFECTIVITY = abs(INFECTIVITY - RESEARCH)
 
-        BATCH_INFECTED = random.randint(1, 10) * TIME / LIMIT + 1
+        BATCH_INFECTED = random.randint(TIME + 1197, 1198)
         POPULATION_INFECTED = math.floor(BATCH_INFECTED * INFECTIVITY)
         POPULATION_DEAD = math.floor(POPULATION_INFECTED * FATALITY)
 
         TOTAL_INFECTED += POPULATION_INFECTED
+        TOTAL_DEAD += POPULATION_DEAD
 
     print(f"TIME: {TIME}, CURE: {CURE}, INFECTED: {POPULATION_INFECTED}, DEAD: {POPULATION_DEAD}")
     TIME += 1

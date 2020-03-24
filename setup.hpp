@@ -147,7 +147,7 @@ bool float_less_than(float a, float b) {
            ((std::fabs(a) < std::fabs(b) ? std::fabs(b) : std::fabs(a)) * std::numeric_limits<float>::epsilon());
 }
 
-void epidemic::write_stats_to_mem(std::string &ram_data, int cycle) {
+void epidemic::write_stats_to_mem(std::string &ram_data, unsigned int cycle) {
 
     std::string ram_addr = std::to_string(cycle);
     align_signal_width(6, ram_addr);
