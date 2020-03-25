@@ -128,12 +128,12 @@ private:
             *min_inf_din_link, *min_inf_dout_link;
 
     // main loop attributes
-    unsigned int SIMTIME = 10000;
+    unsigned int SIMTIME = 2000;
     unsigned int LOOPBEGIN = 2;
     unsigned int LOOPEND = (SIMTIME - 2);
     unsigned int m_cycle{};
     bool m_keep_send{}, m_keep_recv{};
-    bool m_mutate_lock = false, m_loop_lock = true, m_mem_read_flag = false, m_eradicated = false;
+    bool m_mutate_lock = false, m_loop_lock = true, m_mem_read_flag = false, m_cure_found = false, m_eradicated = false;
 
     // simulation values
     unsigned int m_limit{}, m_cure_threshold{}, m_batch_infected{}, m_total_infected{}, m_total_infected_today{}, m_total_dead_today{}, m_gene{};

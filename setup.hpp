@@ -150,7 +150,7 @@ bool float_less_than(float a, float b) {
 void epidemic::write_stats_to_mem(std::string &ram_data, unsigned int cycle) {
 
     std::string ram_addr = std::to_string(cycle);
-    align_signal_width(6, ram_addr);
+    align_signal_width(4, ram_addr);
     flash_mem_din_link->send(new SST::Interfaces::StringEvent(
             std::to_string(m_keep_send) +
             std::to_string(m_keep_recv) +

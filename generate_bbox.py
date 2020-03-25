@@ -84,7 +84,7 @@ if __name__ == "__main__":
             module="flash_mem",
         )
         flash_mem.set_ports((
-            ("input", "address", "17"),
+            ("input", "address", "10"),
             ("input", "cs", "1"),
             ("input", "we", "1"),
             ("input", "oe", "1"),

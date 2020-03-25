@@ -13,7 +13,7 @@ void epidemic::flash_mem(SST::Event *ev) {
         align_signal_width(8, m_mem_data_out);
 
         std::string ram_addr = std::to_string(m_cycle % (SIMTIME / 2));
-        align_signal_width(6, ram_addr);
+        align_signal_width(4, ram_addr);
         fprintf(m_fp, "%s %s\n", ram_addr.c_str(), m_mem_data_out.c_str());
 
     }
