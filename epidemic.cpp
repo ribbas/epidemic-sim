@@ -121,7 +121,8 @@ bool epidemic::tick(SST::Cycle_t current_cycle) {
             if (m_cure_found) {
 
                 // random int between 1 and 10
-                m_dis.param(std::uniform_int_distribution<unsigned int>::param_type(0, 50));
+                m_dis.param(std::uniform_int_distribution<unsigned int>::param_type(0, 100));
+                m_extra_cycles++;
 
                 if (!m_batch_infected) {
                     m_eradicated = true;
@@ -195,7 +196,8 @@ bool epidemic::tick(SST::Cycle_t current_cycle) {
 
         if (m_eradicated && m_loop_lock) {
 
-            SIMTIME = current_cycle + 60;
+            int _current_cycle = current_cycle + m_extra_cycles + 7;
+            SIMTIME = _current_cycle;
             LOOPEND = (SIMTIME - 2);
             m_loop_lock = false;
 
@@ -204,31 +206,31 @@ bool epidemic::tick(SST::Cycle_t current_cycle) {
 
             ram_data = factor;
             align_signal_width(8, ram_data);
-            write_stats_to_mem(ram_data, current_cycle + 53);
+            write_stats_to_mem(ram_data, _current_cycle - 7);
 
             ram_data = std::to_string(m_severity).substr(2, 8);
             append_signal('0', 7, ram_data);
             ram_data = "0" + ram_data;
-            write_stats_to_mem(ram_data, current_cycle + 54);
+            write_stats_to_mem(ram_data, _current_cycle - 6);
 
             ram_data = std::to_string(m_infectivity).substr(2, 8);
             append_signal('0', 7, ram_data);
             ram_data = "0" + ram_data;
-            write_stats_to_mem(ram_data, current_cycle + 55);
+            write_stats_to_mem(ram_data, _current_cycle - 5);
 
             ram_data = std::to_string(m_fatality).substr(2, 8);
             append_signal('0', 7, ram_data);
             ram_data = "0" + ram_data;
-            write_stats_to_mem(ram_data, current_cycle + 56);
+            write_stats_to_mem(ram_data, _current_cycle - 4);
 
             ram_data = std::to_string(m_birth_rate).substr(2, 8);
             append_signal('0', 7, ram_data);
             ram_data = "0" + ram_data;
-            write_stats_to_mem(ram_data, current_cycle + 57);
+            write_stats_to_mem(ram_data, _current_cycle - 3);
 
             ram_data = std::to_string(m_cure_threshold);
             align_signal_width(8, ram_data);
-            write_stats_to_mem(ram_data, current_cycle + 58);
+            write_stats_to_mem(ram_data, _current_cycle - 2);
 
             m_output.verbose(CALL_INFO, 1, 0, "Factor: %s\n", factor.c_str());
             m_output.verbose(CALL_INFO, 1, 0, "Severity: %f\n", m_severity);
