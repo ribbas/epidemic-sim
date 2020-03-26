@@ -9,7 +9,7 @@ parser = ArgumentParser()
 parser.add_argument("path", type=str)
 parser.add_argument("end_seed", type=int, default=0)
 parser.add_argument("--plot", "-p", action="store_true", default=False)
-parser.add_argument("--dump", "-d", action="store_true", default=False)
+parser.add_argument("--console", "-c", action="store_true", default=False)
 args = parser.parse_args().__dict__
 
 data_dir = args["path"]
@@ -21,9 +21,9 @@ stat_features = [
     "birth_rate",
     "cure_threshold",
     "cure_started_day",
+    "eradicated_day",
     "total_inf",
     "total_dead",
-    "days",
 ]
 
 conn = sqlite3.connect(data_dir)
@@ -37,7 +37,7 @@ db = {k: [d[k] for d in db if k in d] for k in stat_features}
 
 conn.close()
 
-if args["dump"]:
+if args["console"]:
 
     def attr_with_index(attr, data):
 

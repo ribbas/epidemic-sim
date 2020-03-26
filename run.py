@@ -9,9 +9,7 @@ import sys
 import sst
 
 BASE_PATH = os.getcwd()
-
 CLOCK = "1Hz"
-
 LINK_DELAY = "1ps"
 
 
@@ -144,7 +142,6 @@ flash_mem_comp.addParams({
 
 # PyRTL components
 ###############################################################################
-print(os.path.join(BASE_PATH, "../pyrtl/blackboxes/mutation_driver.py"))
 mutation_comp = sst.Component(
     "Gene Mutation Component (PyRTL)", "epidemic.mutation")
 mutation_comp.addParams({

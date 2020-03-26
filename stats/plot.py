@@ -13,14 +13,14 @@ if __name__ == "__main__":
         data = json.load(stats_dump_file)
 
         max_y_val = data["plot_data"]["inf_total"][-1] + \
-            data["plot_data"]["inf_total"][int(data["days"] / 4)]
+            data["plot_data"]["inf_total"][int(data["eradicated_day"] / 4)]
 
         def gaussian_func(x, scale, shift):
             return scale * math.exp(-1 / 2 * math.pow((x - shift) / (shift / math.pi), 2))
 
         bell_curve = [
             gaussian_func(x, data["plot_data"]["inf_total"][-1], data["cure_found_day"])
-            for x in range(data["days"])
+            for x in range(data["eradicated_day"])
         ]
         fig = go.Figure()
         fig.add_trace(go.Scatter(

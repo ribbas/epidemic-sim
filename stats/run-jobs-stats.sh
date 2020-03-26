@@ -1,18 +1,11 @@
 #! /bin/zsh
 
 ncpu=$(nproc --all)
-seed_begin=5
+seed_begin=0
 seed_term=$(($1))
 seed_end=$((${seed_begin} + ${ncpu}))
-make_run_cmd_str="make run SEED"
+make_run_cmd_str="make stats SEED"
 make_cmd="${make_run_cmd_str}=${seed_begin}"
-
-# array=()
-# for seed in ${array[@]} ; do
-#     make_cmd+=" & ${make_run_cmd_str}=${seed}"
-# done
-# echo ${make_cmd}
-# eval ${make_cmd}
 
 # make generate install
 while ((${seed_end} <= ${seed_term})); do

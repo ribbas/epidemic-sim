@@ -22,11 +22,8 @@ if __name__ == "__main__":
         "eradicated_date": None,
         "total_inf": None,
         "total_dead": None,
-        "days": None,
         "plot_data": {
             "date": [],
-            "inf_month": [],
-            "dead_month": [],
             "inf_total": [],
             "dead_total": [],
             "cure": []
@@ -90,9 +87,8 @@ if __name__ == "__main__":
             stats["plot_data"]["dead_total"].append(total_dead)
             stats["plot_data"]["cure"].append(cure)
 
-            stats["total_inf"] = total_inf
-            stats["total_dead"] = total_dead
-            stats["days"] = int(_addr) - 5
+        stats["total_inf"] = total_inf
+        stats["total_dead"] = total_dead
 
         print(f"Cure started on {stats['cure_started_date']}")
         print(f"Cure found on {stats['cure_found_date']}")

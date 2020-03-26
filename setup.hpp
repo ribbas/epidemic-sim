@@ -101,6 +101,7 @@ epidemic::epidemic(SST::ComponentId_t id, SST::Params &params) :
 
     m_output.init("\033[93mepidemic-" + getName() + "\033[0m -> ", 1, 0, SST::Output::STDOUT);
 
+    m_output.setVerboseLevel(0);
     // Just register a plain clock for this simple example
     registerClock("1Hz", new SST::Clock::Handler<epidemic>(this, &epidemic::tick));
 
