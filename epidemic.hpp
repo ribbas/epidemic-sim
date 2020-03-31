@@ -105,6 +105,7 @@ private:
 
     // SST parameters
     uint16_t seed;
+    bool output;
 
     // RNG attributes
     std::mt19937 m_gen;
@@ -132,7 +133,7 @@ private:
     unsigned int LOOPBEGIN = 2;
     unsigned int LOOPEND = (SIMTIME - 2);
     unsigned int m_cycle{};
-    unsigned int m_extra_cycles{};
+    unsigned int m_extra_cycles = 7;
     bool m_keep_send{}, m_keep_recv{};
     bool m_mutate_lock = false, m_loop_lock = true, m_mem_read_flag = false, m_cure_found = false, m_eradicated = false;
 

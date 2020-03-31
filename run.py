@@ -25,6 +25,7 @@ epidemic_main = sst.Component(
     "Epidemic Simulation Driver", "epidemic.epidemic")
 epidemic_main.addParams({
     "SEED": int(sys.argv[1]),
+    "OUTPUT": False
 })
 
 

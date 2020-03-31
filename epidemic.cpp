@@ -124,7 +124,7 @@ bool epidemic::tick(SST::Cycle_t current_cycle) {
                 m_dis.param(std::uniform_int_distribution<unsigned int>::param_type(0, 100));
                 m_extra_cycles++;
 
-                if (!m_batch_infected) {
+                if (!m_batch_infected or (m_extra_cycles + current_cycle) > 1021) {
                     m_eradicated = true;
                     m_cure_found = false;
                 }
@@ -132,9 +132,7 @@ bool epidemic::tick(SST::Cycle_t current_cycle) {
             } else {
 
                 // random int between 1 and 10
-                int m_batch_infected_lower_limit = std::min((int) current_cycle, 1997);
-                m_dis.param(
-                        std::uniform_int_distribution<unsigned int>::param_type(m_batch_infected_lower_limit, 1998));
+                m_dis.param(std::uniform_int_distribution<unsigned int>::param_type(current_cycle, 1998));
 
             }
 
@@ -196,7 +194,7 @@ bool epidemic::tick(SST::Cycle_t current_cycle) {
 
         if (m_eradicated && m_loop_lock) {
 
-            int _current_cycle = current_cycle + m_extra_cycles + 7;
+            int _current_cycle = current_cycle + m_extra_cycles;
             SIMTIME = _current_cycle;
             LOOPEND = (SIMTIME - 2);
             m_loop_lock = false;

@@ -10,6 +10,7 @@ epidemic::epidemic(SST::ComponentId_t id, SST::Params &params) :
         SST::Component(id),
         // Collect all the parameters from the project driver
         seed(params.find<uint16_t>("SEED", 0)),
+        output(params.find<bool>("OUTPUT", true)),
         m_gen(seed),
         // initialize ram links
         flash_mem_din_link(configureLink("flash_mem_din")),
@@ -101,7 +102,7 @@ epidemic::epidemic(SST::ComponentId_t id, SST::Params &params) :
 
     m_output.init("\033[93mepidemic-" + getName() + "\033[0m -> ", 1, 0, SST::Output::STDOUT);
 
-    m_output.setVerboseLevel(0);
+    m_output.setVerboseLevel(output);
     // Just register a plain clock for this simple example
     registerClock("1Hz", new SST::Clock::Handler<epidemic>(this, &epidemic::tick));
 
