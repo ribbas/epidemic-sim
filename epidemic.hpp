@@ -129,7 +129,7 @@ private:
             *min_inf_din_link, *min_inf_dout_link;
 
     // main loop attributes
-    unsigned int SIMTIME = 2000;
+    unsigned int SIMTIME = 1100;
     unsigned int LOOPBEGIN = 2;
     unsigned int LOOPEND = (SIMTIME - 2);
     unsigned int m_cycle{};
