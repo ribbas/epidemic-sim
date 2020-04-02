@@ -6,6 +6,7 @@ import json
 import math
 import sys
 
+import plotly
 import plotly.graph_objs as go
 
 if __name__ == "__main__":
@@ -36,62 +37,68 @@ if __name__ == "__main__":
         fig.add_trace(go.Scatter(
             x=data["plot_data"]["date"], y=data["plot_data"]["dead_total"],
             name="population dead", fill="tozeroy",
-            line={"color": "rgb(255,0,0)"},
+            line={"color": "rgb(231, 76, 60)"},
         ))
 
         cure_started_date = datetime.datetime.strptime(data["cure_started_date"], "%Y-%m-%d")
         cure_started_date_val = data["plot_data"]["inf_total"][-1]
-        fig.add_trace(go.Scatter(
-            x=[cure_started_date],
-            y=[max_y_val],
-            name="cure started date",
-            text=["Cure started"],
-            mode="text",
-        ))
+        fig.add_annotation(
+            x=cure_started_date,
+            y=max_y_val,
+            text="Cure started"
+        )
         fig.add_shape({
             "type": "line",
             "name": "cure started date",
             "x0": cure_started_date,
             "y0": 0,
             "x1": cure_started_date,
-            "y1": max_y_val - 10000,
+            "y1": max_y_val - 20000,
             "line": {"color": "rgb(97,212,179)"}
         })
 
         cure_found_date = datetime.datetime.strptime(data["cure_found_date"], "%Y-%m-%d")
-        fig.add_trace(go.Scatter(
-            x=[cure_found_date],
-            y=[max_y_val],
-            name="cure found date",
-            text=["Cure found"],
-            mode="text",
-        ))
         fig.add_shape({
             "type": "line",
             "name": "cure found date",
             "x0": cure_found_date,
             "y0": 0,
             "x1": cure_found_date,
-            "y1": max_y_val - 10000,
+            "y1": max_y_val - 20000,
             "line": {"color": "rgb(97,212,179)"}
         })
+        fig.add_annotation(
+            x=cure_found_date,
+            y=max_y_val,
+            text="Cure found"
+        )
 
         eradicated_date = datetime.datetime.strptime(data["eradicated_date"], "%Y-%m-%d")
-        fig.add_trace(go.Scatter(
-            x=[eradicated_date],
-            y=[max_y_val],
-            name="disease eradicated date",
-            text=["Disease eradicated"],
-            mode="text",
-        ))
         fig.add_shape({
             "type": "line",
-            "name": "disease eradicated date",
             "x0": eradicated_date,
             "y0": 0,
             "x1": eradicated_date,
-            "y1": max_y_val - 10000,
+            "y1": max_y_val - 20000,
             "line": {"color": "rgb(97,212,179)"}
         })
+        fig.add_annotation(
+            x=eradicated_date,
+            y=max_y_val,
+            text="Disease eradicated"
+        )
+        fig.update_annotations(
+            dict(
+                xref="x",
+                yref="y",
+                showarrow=True,
+                arrowhead=7,
+                ax=0,
+                ay=-40,
+                textangle=-90
+            )
+        )
 
+        plotly.io.orca.config.executable = "/home/sabbir/Downloads/orca-1.3.1.AppImage"
+        fig.write_image("docs/sample0.png", scale=5, width=1100, height=900)
         fig.show()

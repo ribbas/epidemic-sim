@@ -118,7 +118,10 @@ if args["dump_stats"]:
 if args["plot_stats"]:
 
     import plotly
+    import plotly.graph_objects as go
     from plotly.subplots import make_subplots
+
+    plotly.io.orca.config.executable = "/home/sabbir/Downloads/orca-1.3.1.AppImage"
 
     conn = sqlite3.connect(data_dir)
 
@@ -137,22 +140,9 @@ if args["plot_stats"]:
         eradicated_day, total_inf, total_dead, in conn.execute("SELECT * FROM STATS")
     ]
 
+    # DISTRIBUTION OF AFFECTED POPULATIONS
     fig = make_subplots(
         rows=1, cols=2,
-        column_widths=[0.75, 0.25],
-        shared_yaxes=True, horizontal_spacing=0.02
-    )
-    fig.add_trace(
-        plotly.graph_objs.Scatter(
-            x=[x[0] for x in conn.execute("SELECT infectivity FROM STATS")],
-            y=[x[0] for x in conn.execute("SELECT total_inf FROM STATS")],
-            name="Total Population Infected vs Days Until Cure Started",
-            hovertemplate="<b>%{text}</b>",
-            text=_text,
-            line={"color": "rgb(255,154,0)"},
-            mode="markers",
-        ),
-        row=1, col=1
     )
     fig.add_trace(
         plotly.graph_objs.Box(
@@ -161,14 +151,148 @@ if args["plot_stats"]:
             text=_text,
             jitter=0.3
         ),
+        row=1, col=1
+    )
+    fig.add_trace(
+        plotly.graph_objs.Box(
+            y=[x[0] for x in conn.execute("SELECT total_dead FROM STATS")],
+            name="Distribution of Total Population Dead",
+            text=_text,
+            jitter=0.3
+        ),
         row=1, col=2
     )
     fig.update_layout(
-        # title="Plot Title",
+        showlegend=False,
+    )
+    fig.write_image("docs/dist0.png", scale=5, width=1000, height=1000)
+
+    # DISTRIBUTION OF TIME VARIABLES
+    fig = make_subplots(
+        rows=1, cols=3,
+    )
+    fig.add_trace(
+        plotly.graph_objs.Box(
+            y=[x[0] for x in conn.execute("SELECT cure_threshold FROM STATS")],
+            name="Distribution of Cure Threshold",
+            text=_text,
+            jitter=0.3
+        ),
+        row=1, col=1
+    )
+    fig.add_trace(
+        plotly.graph_objs.Box(
+            y=[x[0] for x in conn.execute("SELECT cure_started_day FROM STATS")],
+            name="Distribution of Cure Started Day",
+            text=_text,
+            jitter=0.3
+        ),
+        row=1, col=2
+    )
+    fig.add_trace(
+        plotly.graph_objs.Box(
+            y=[x[0] for x in conn.execute("SELECT eradicated_day FROM STATS")],
+            name="Distribution of Eradicated Day",
+            text=_text,
+            jitter=0.3
+        ),
+        row=1, col=3
+    )
+    fig.update_layout(
+        showlegend=False,
+    )
+    fig.write_image("docs/dist1.png", scale=5, width=1000, height=1000)
+
+    fig = go.Figure()
+    fig.add_trace(
+        go.Scatter(
+            x=[x[0] for x in conn.execute("SELECT total_dead FROM STATS")],
+            y=[x[0] for x in conn.execute("SELECT total_inf FROM STATS")],
+            name="Total Population Dead vs Total Population Infected",
+            hovertemplate="<b>%{text}</b>",
+            text=_text,
+            line={"color": "rgb(255,154,0)"},
+            mode="markers",
+        ),
+    )
+    fig.update_layout(
+        xaxis_title="Total Population Dead",
+        yaxis_title="Total Population Infected",
+        showlegend=False,
+    )
+    fig.write_image("docs/dead_vs_inf.png", scale=5, width=1000, height=1000)
+
+    fig = go.Figure()
+    fig.add_trace(
+        go.Scatter(
+            x=[x[0] for x in conn.execute("SELECT cure_started_day FROM STATS")],
+            y=[x[0] for x in conn.execute("SELECT total_inf FROM STATS")],
+            name="Days Until Cure Started vs Total Population Infected",
+            hovertemplate="<b>%{text}</b>",
+            text=_text,
+            line={"color": "rgb(255,154,0)"},
+            mode="markers",
+        ),
+    )
+    fig.update_layout(
         xaxis_title="Days Until Cure Started",
         yaxis_title="Total Population Infected",
         showlegend=False,
     )
-    plotly.offline.plot(fig, filename="stats/plot.html", auto_open=False)
+    fig.write_image("docs/cure_start_vs_inf.png", scale=5, width=1000, height=1000)
+
+    fig = go.Figure()
+    fig.add_trace(
+        go.Scatter(
+            x=[x[0] for x in conn.execute("SELECT cure_started_day FROM STATS")],
+            y=[x[0] for x in conn.execute("SELECT total_inf FROM STATS")],
+            name="Days Until Cure Started vs Total Population Infected",
+            hovertemplate="<b>%{text}</b>",
+            text=_text,
+            line={"color": "rgb(255,154,0)"},
+            mode="markers",
+        ),
+    )
+    x_vals, y_vals = zip(
+        *conn.execute(
+            "SELECT cure_started_day, AVG(total_inf) FROM STATS GROUP BY cure_started_day"
+        )
+    )
+    fig.add_trace(
+        go.Scatter(
+            x=x_vals,
+            y=y_vals,
+            name="Days Until Cure Started vs Total Population Infected",
+            hovertemplate="<b>%{text}</b>",
+            text=_text,
+            line={"color": "rgb(142, 68, 173)"},
+            mode="lines+markers",
+        ),
+    )
+    fig.update_layout(
+        xaxis_title="Days Until Cure Started",
+        yaxis_title="Total Population Infected",
+        showlegend=False,
+    )
+    fig.write_image("docs/cure_start_vs_inf2.png", scale=5, width=1000, height=1000)
+
+    fig = go.Figure()
+    fig.add_trace(
+        go.Scatter(
+            x=[x[0] for x in conn.execute("SELECT cure_started_day FROM STATS")],
+            y=[x[0] for x in conn.execute("SELECT eradicated_day FROM STATS")],
+            name="Days Until Cure Started vs Days Until Disease Eradicated",
+            hovertemplate="<b>%{text}</b>",
+            text=_text,
+            line={"color": "rgb(255,154,0)"},
+            mode="markers",
+        ),
+    )
+    fig.update_layout(
+        xaxis_title="Days Until Cure Started",
+        yaxis_title="Days Until Disease Eradicated",
+        showlegend=False,
+    )
+    fig.write_image("docs/cure_start_vs_erad.png", scale=5, width=1000, height=1000)
 
     conn.close()
