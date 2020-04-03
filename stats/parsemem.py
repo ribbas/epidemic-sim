@@ -69,7 +69,6 @@ if __name__ == "__main__":
                 stats["cure_started_date"] = (
                     today + datetime.timedelta(stats["cure_started_day"])).isoformat()
             elif not stats["cure_found_day"] and not cure and stats["cure_started_day"]:
-                print("cure found", _addr, pop_dead, pop_inf, cure)
                 stats["cure_found_day"] = int(_addr)
                 stats["cure_found_date"] = (
                     today + datetime.timedelta(stats["cure_found_day"])).isoformat()
