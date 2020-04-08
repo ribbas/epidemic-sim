@@ -9,7 +9,7 @@ if [ "${@[-1]}" = "--stats" ]; then
     make_cmd_str="make stats SEED"
 elif [ "${@[-1]}" = "--run" ]; then
     echo "Running program..."
-    make_cmd_str="make run SEED"
+    make_cmd_str="timeout 30 make run SEED"
 else
     exit 22
 fi
@@ -50,5 +50,3 @@ else
     eval ${make_cmd}
 
 fi
-
-echo "\e[1;34mDONE\e[0m"

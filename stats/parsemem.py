@@ -64,6 +64,12 @@ if __name__ == "__main__":
 
         for _addr, _data in zip(addr[:-7], data[:-7]):
 
+            if "x" in _data:
+                stats["eradicated_day"] = int(_addr)
+                stats["eradicated_date"] = (
+                    today + datetime.timedelta(stats["eradicated_day"])).isoformat()
+                break
+
             _data = str(int(_data, 2)).zfill(8)
             pop_dead, pop_inf, cure = int(_data[0:3]), int(_data[3:6]), int(_data[6:8])
 
@@ -75,12 +81,6 @@ if __name__ == "__main__":
                 stats["cure_found_day"] = int(_addr)
                 stats["cure_found_date"] = (
                     today + datetime.timedelta(stats["cure_found_day"])).isoformat()
-
-            if stats["cure_found_day"] and not pop_inf and not pop_dead:
-                stats["eradicated_day"] = int(_addr)
-                stats["eradicated_date"] = (
-                    today + datetime.timedelta(stats["eradicated_day"])).isoformat()
-                break
 
             total_inf += pop_inf * stats["factor"]
             total_dead += pop_dead * stats["factor"]
