@@ -14,18 +14,15 @@ generate:
 	@$(call iecho,"Generating files for epidemic-sim...")
 	python generate_bbox.py systemc && mv -n blackboxes systemc
 	python generate_bbox.py pyrtl && mv -n blackboxes pyrtl
-	python generate_bbox.py chisel && mv -n blackboxes chisel
+	python generate_bbox.py verilog && mv -n blackboxes verilog
 
 .PHONY: install
 .ONESHELL:
 install:
 	@mkdir -p build
 	cd build && cmake -DCMAKE_CXX_COMPILER=${CXX} .. && $(MAKE)
-	mv -n ../chisel/blackboxes/build.sbt .
-	cat <<EOF >> build.sbt
-	sourcesInBase := false
-	scalaSource in Compile := baseDirectory.value / "../chisel"
-	EOF
+	cp ../verilog/blackboxes/flash_mem_driver.py .
+	$(MAKE) -f ../verilog/blackboxes/Makefile.config dumpconfig
 	sst-register epidemic-sim epidemic-sim_LIBDIR=$(CURDIR)
 
 .PHONY: run

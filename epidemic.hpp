@@ -143,7 +143,7 @@ private:
     std::string m_mutation = "0";
 
     // flash memory variables
-    std::string m_mem_read = "101", m_mem_write = "111", m_mem_data_out;
+    std::string m_mem_read = "110", m_mem_write = "101", m_mem_data_out;
     FILE *m_fp{};
 
 };

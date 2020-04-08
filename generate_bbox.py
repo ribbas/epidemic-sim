@@ -3,7 +3,7 @@
 
 import sys
 
-from boilerplate import Chisel, PyRTL, SystemC
+from boilerplate import Chisel, PyRTL, SystemC, Verilog
 
 if __name__ == "__main__":
 
@@ -90,5 +90,24 @@ if __name__ == "__main__":
             ("input", "oe", "1"),
             ("input", "data_in", "25"),
             ("output", "data_out", "25"),
+        ))
+        flash_mem.generate_bbox()
+
+    elif sys.argv[-1] == "verilog":
+
+        flash_mem = Verilog(
+            lib="epidemic",
+            ipc="sock",
+            lib_dir="../../../../sit/",
+            module="flash_mem",
+            module_dir="${HOME}/sit/examples/epidemic-sim/verilog"
+        )
+        flash_mem.set_ports((
+            ("input", "address", "10"),
+            ("input", "cs", "1"),
+            ("input", "oe", "1"),
+            ("input", "we", "1"),
+            ("input", "data_in", "25"),
+            ("output", "data_out", "25b"),
         ))
         flash_mem.generate_bbox()

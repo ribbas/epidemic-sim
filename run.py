@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import json
 import os
 from random import SystemRandom
 from string import ascii_uppercase, digits
@@ -131,13 +132,22 @@ minf_inf_comp.addParams({
     "ipc_port": get_rand_tmp(),
 })
 
-# Chisel components
+# Verilog components
 ###############################################################################
+_proc = []
+with open("config-cmd.json") as cmd_file:
+    data = json.load(cmd_file)
+for k, v in data.items():
+    if k != "FILE":
+        os.environ[k] = v
+    else:
+        _proc = v
+
 flash_mem_comp = sst.Component(
-    "Memory Component (Chisel)", "epidemic.flash_mem")
+    "Memory Component (Verilog)", "epidemic.flash_mem")
 flash_mem_comp.addParams({
     "clock": CLOCK,
-    "proc": "test:runMain flash_mem.flash_memMain",
+    "proc": _proc,
     "ipc_port": get_rand_tmp(),
 })
 

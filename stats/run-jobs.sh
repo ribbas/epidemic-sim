@@ -1,6 +1,6 @@
 #! /bin/zsh
 
-ncpu=$(nproc --all)
+ncpu=$(($(nproc --all) - 1))
 seed_begin=$(($1))
 seed_end=$(($2))
 

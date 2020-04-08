@@ -22,7 +22,8 @@ endforeach ()
 add_executable(
         libepidemic.so
         epidemic.cpp
-        chisel/blackboxes/flash_mem_comp.cpp
+        # chisel/blackboxes/flash_mem_comp.cpp
+        verilog/blackboxes/flash_mem_comp.cpp
         pyrtl/blackboxes/mutation_comp.cpp
         systemc/blackboxes/mul_inv_comp.cpp
         systemc/blackboxes/minf_comp.cpp

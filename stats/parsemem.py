@@ -39,10 +39,12 @@ if __name__ == "__main__":
             _addr, _data = line.split()
             addr.append(_addr)
             data.append(_data)
+
         [split_line(line) for line in mem_dump_file]
 
         _stats = data[-7:-1]
         for stats_line in range(6):
+            _stats[stats_line] = str(int(_stats[stats_line], 2)).zfill(8)
             if not stats_line:
                 stats["factor"] = int(_stats[stats_line])
             elif stats_line == 1:
@@ -62,6 +64,7 @@ if __name__ == "__main__":
 
         for _addr, _data in zip(addr[:-7], data[:-7]):
 
+            _data = str(int(_data, 2)).zfill(8)
             pop_dead, pop_inf, cure = int(_data[0:3]), int(_data[3:6]), int(_data[6:8])
 
             if not stats["cure_started_day"] and cure == 1:
