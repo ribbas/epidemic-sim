@@ -77,22 +77,6 @@ if __name__ == "__main__":
         ))
         mutation.generate_bbox()
 
-    elif sys.argv[-1] == "chisel":
-
-        flash_mem = Chisel(
-            **ARGS,
-            module="flash_mem",
-        )
-        flash_mem.set_ports((
-            ("input", "address", "10"),
-            ("input", "cs", "1"),
-            ("input", "we", "1"),
-            ("input", "oe", "1"),
-            ("input", "data_in", "25"),
-            ("output", "data_out", "25"),
-        ))
-        flash_mem.generate_bbox()
-
     elif sys.argv[-1] == "verilog":
 
         flash_mem = Verilog(

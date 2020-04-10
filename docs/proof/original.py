@@ -5,8 +5,9 @@ import sys
 POPULATION_TOTAL = 7760000000
 CURE = 0.00
 TIME = 0
+IS_ERADICTED = False
 
-while CURE < 100.00:
+while not IS_ERADICTED:
 
     if TIME == 0:
 
@@ -22,6 +23,7 @@ while CURE < 100.00:
         FATALITY = 1 / random.randint(100, LIMIT)  # rate of death
         INFECTIVITY = 1 / random.randint(100, LIMIT)  # rate of infection
         CURE_THRESHOLD = math.floor(POPULATION_TOTAL * SEVERITY * BIRTH_RATE) / LIMIT
+        print("| DAY |  CURE  | INF | DEAD |\n|-----|--------|-----|------|")
 
     else:
 
@@ -42,12 +44,13 @@ while CURE < 100.00:
             elif str(FATALITY)[-1] == str(MUTATED_GENE):
                 INFECTIVITY = abs(INFECTIVITY - RESEARCH)
 
-        BATCH_INFECTED = random.randint(TIME + 1197, 1198)
+        BATCH_INFECTED = random.randint(TIME, 1998) if CURE < 100.00 else random.randint(0, 100)
+        IS_ERADICTED = not BATCH_INFECTED
         POPULATION_INFECTED = math.floor(BATCH_INFECTED * INFECTIVITY)
         POPULATION_DEAD = math.floor(POPULATION_INFECTED * FATALITY)
 
         TOTAL_INFECTED += POPULATION_INFECTED
         TOTAL_DEAD += POPULATION_DEAD
 
-    print(f"TIME: {TIME}, CURE: {CURE}, INFECTED: {POPULATION_INFECTED}, DEAD: {POPULATION_DEAD}")
+    print(f"|{TIME:4} | {CURE:6.2f} | {POPULATION_INFECTED:3} | {POPULATION_DEAD:4} |")
     TIME += 1
