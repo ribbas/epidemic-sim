@@ -29,7 +29,7 @@ install:
 .ONESHELL:
 run:
 	@$(call iecho,"Running epidemic-sim simulation...")
-	cd build && sst ../run.py ${SEED} || { $(call eecho,"SST failed to launch properly - make sure to clear the cache"); exit 1; }
+	cd build && sst ../run.py ${BSEED} ${ESEED} || { $(call eecho,"SST failed to launch properly - make sure to clear the cache"); exit 1; }
 
 .PHONY: stats
 stats:

@@ -3,6 +3,7 @@
 
 from argparse import ArgumentParser
 import json
+import math
 from os import listdir, path
 import sqlite3
 
@@ -38,7 +39,7 @@ if args["missing"]:
     print(f"Files missing: ", end="")
     for f in file_range:
         if f"{f}.json" not in listdir(data_dir):
-            print(f, end=", ")
+            print(f, end=" ")
     print("")
 
 if args["to_sqlite"]:
@@ -75,10 +76,6 @@ if args["to_sqlite"]:
             print(f"{seed}.json missing")
 
     values = ",\n".join(f"({','.join(i)})" for i in db)
-    print(f"""
-        INSERT INTO STATS ({','.join(stat_features)}) VALUES {values};
-        """)
-
     conn.execute(f"""
         INSERT INTO STATS ({','.join(stat_features)}) VALUES {values};
         """)
@@ -101,24 +98,30 @@ if args["dump_stats"]:
           OFFSET (SELECT (COUNT(*) - 1) / 2
                   FROM STATS))
     """
-    MAX_QUERY = "SELECT seed, MAX({0}) FROM STATS"
-    MIN_QUERY = "SELECT seed, MIN({0}) FROM STATS"
+    MAX_QUERY = "SELECT MAX({0}) FROM STATS"
+    MIN_QUERY = "SELECT MIN({0}) FROM STATS"
+    STD_DEV_QUERY = """
+    SELECT SUM(
+        ({0}-(SELECT AVG({0}) FROM STATS)) * ({0}-(SELECT AVG({0}) FROM STATS))
+    ) / (COUNT({0}) - 1)
+    FROM STATS
+    """
 
     for feature in stat_features[1:]:
         print("---------------------------------------")
         print(feature)
-        print("mean:", conn.execute(AVG_QUERY.format(feature)).fetchone()[0])
-        print("median:", conn.execute(MED_QUERY.format(feature)).fetchone()[0])
-        print("min:", conn.execute(MIN_QUERY.format(feature)).fetchone())
-        print("max:", conn.execute(MAX_QUERY.format(feature)).fetchone())
         print("---------------------------------------")
+        print("mean:", conn.execute(AVG_QUERY.format(feature)).fetchone()[0])
+        print("std:", math.sqrt(conn.execute(STD_DEV_QUERY.format(feature)).fetchone()[0]))
+        print("median:", conn.execute(MED_QUERY.format(feature)).fetchone()[0])
+        print("min:", conn.execute(MIN_QUERY.format(feature)).fetchone()[0])
+        print("max:", conn.execute(MAX_QUERY.format(feature)).fetchone()[0])
 
     conn.close()
 
 if args["plot_stats"]:
 
     import plotly
-    import plotly.graph_objects as go
     from plotly.subplots import make_subplots
 
     plotly.io.orca.config.executable = "/home/sabbir/Downloads/orca-1.3.1.AppImage"
@@ -142,157 +145,62 @@ if args["plot_stats"]:
 
     # DISTRIBUTION OF AFFECTED POPULATIONS
     fig = make_subplots(
-        rows=1, cols=2,
+        rows=2, cols=1,
     )
     fig.add_trace(
         plotly.graph_objs.Box(
-            y=[x[0] for x in conn.execute("SELECT total_inf FROM STATS")],
-            name="Distribution of Total Population Infected",
-            text=_text,
+            x=[x[0] for x in conn.execute("SELECT total_inf FROM STATS")],
+            name="Total Population Infected",
+            marker_color="rgb(255,154,0)",
             jitter=0.3
         ),
         row=1, col=1
     )
     fig.add_trace(
         plotly.graph_objs.Box(
-            y=[x[0] for x in conn.execute("SELECT total_dead FROM STATS")],
-            name="Distribution of Total Population Dead",
-            text=_text,
-            jitter=0.3
-        ),
-        row=1, col=2
-    )
-    fig.update_layout(
-        showlegend=False,
-    )
-    fig.write_image("docs/dist0.png", scale=5, width=1000, height=1000)
-
-    # DISTRIBUTION OF TIME VARIABLES
-    fig = make_subplots(
-        rows=1, cols=3,
-    )
-    fig.add_trace(
-        plotly.graph_objs.Box(
-            y=[x[0] for x in conn.execute("SELECT cure_threshold FROM STATS")],
-            name="Distribution of Cure Threshold",
-            text=_text,
-            jitter=0.3
-        ),
-        row=1, col=1
-    )
-    fig.add_trace(
-        plotly.graph_objs.Box(
-            y=[x[0] for x in conn.execute("SELECT cure_started_day FROM STATS")],
-            name="Distribution of Cure Started Day",
-            text=_text,
-            jitter=0.3
-        ),
-        row=1, col=2
-    )
-    fig.add_trace(
-        plotly.graph_objs.Box(
-            y=[x[0] for x in conn.execute("SELECT eradicated_day FROM STATS")],
-            name="Distribution of Eradicated Day",
-            text=_text,
-            jitter=0.3
-        ),
-        row=1, col=3
-    )
-    fig.update_layout(
-        showlegend=False,
-    )
-    fig.write_image("docs/dist1.png", scale=5, width=1000, height=1000)
-
-    fig = go.Figure()
-    fig.add_trace(
-        go.Scatter(
             x=[x[0] for x in conn.execute("SELECT total_dead FROM STATS")],
-            y=[x[0] for x in conn.execute("SELECT total_inf FROM STATS")],
-            name="Total Population Dead vs Total Population Infected",
-            hovertemplate="<b>%{text}</b>",
-            text=_text,
-            line={"color": "rgb(255,154,0)"},
-            mode="markers",
+            name="Total Population Dead",
+            marker_color="rgb(231, 76, 60)",
+            jitter=0.3
         ),
+        row=2, col=1
     )
     fig.update_layout(
-        xaxis_title="Total Population Dead",
-        yaxis_title="Total Population Infected",
         showlegend=False,
+        font={
+            "size": 20,
+        },
     )
-    fig.write_image("docs/dead_vs_inf.png", scale=5, width=1000, height=1000)
+    fig.write_image("docs/media/dist_pop.png", scale=5, width=1000, height=750)
 
-    fig = go.Figure()
+    # TIME VARIABLES
+    fig = make_subplots(
+        rows=2, cols=1,
+    )
     fig.add_trace(
-        go.Scatter(
+        plotly.graph_objs.Box(
             x=[x[0] for x in conn.execute("SELECT cure_started_day FROM STATS")],
-            y=[x[0] for x in conn.execute("SELECT total_inf FROM STATS")],
-            name="Days Until Cure Started vs Total Population Infected",
-            hovertemplate="<b>%{text}</b>",
-            text=_text,
-            line={"color": "rgb(255,154,0)"},
-            mode="markers",
+            name="Cure Started Day",
+            marker_color="rgb(155, 89, 182)",
+            jitter=0.3
         ),
+        row=1, col=1
+    )
+    fig.add_trace(
+        plotly.graph_objs.Box(
+            x=[x[0] for x in conn.execute("SELECT eradicated_day FROM STATS")],
+            name="Eradicated Day",
+            marker_color="rgb(46, 204, 113)",
+            jitter=0.3
+        ),
+        row=2, col=1
     )
     fig.update_layout(
-        xaxis_title="Days Until Cure Started",
-        yaxis_title="Total Population Infected",
         showlegend=False,
+        font={
+            "size": 20,
+        },
     )
-    fig.write_image("docs/cure_start_vs_inf.png", scale=5, width=1000, height=1000)
-
-    fig = go.Figure()
-    fig.add_trace(
-        go.Scatter(
-            x=[x[0] for x in conn.execute("SELECT cure_started_day FROM STATS")],
-            y=[x[0] for x in conn.execute("SELECT total_inf FROM STATS")],
-            name="Days Until Cure Started vs Total Population Infected",
-            hovertemplate="<b>%{text}</b>",
-            text=_text,
-            line={"color": "rgb(255,154,0)"},
-            mode="markers",
-        ),
-    )
-    x_vals, y_vals = zip(
-        *conn.execute(
-            "SELECT cure_started_day, AVG(total_inf) FROM STATS GROUP BY cure_started_day"
-        )
-    )
-    fig.add_trace(
-        go.Scatter(
-            x=x_vals,
-            y=y_vals,
-            name="Days Until Cure Started vs Total Population Infected",
-            hovertemplate="<b>%{text}</b>",
-            text=_text,
-            line={"color": "rgb(142, 68, 173)"},
-            mode="lines+markers",
-        ),
-    )
-    fig.update_layout(
-        xaxis_title="Days Until Cure Started",
-        yaxis_title="Total Population Infected",
-        showlegend=False,
-    )
-    fig.write_image("docs/cure_start_vs_inf2.png", scale=5, width=1000, height=1000)
-
-    fig = go.Figure()
-    fig.add_trace(
-        go.Scatter(
-            x=[x[0] for x in conn.execute("SELECT cure_started_day FROM STATS")],
-            y=[x[0] for x in conn.execute("SELECT eradicated_day FROM STATS")],
-            name="Days Until Cure Started vs Days Until Disease Eradicated",
-            hovertemplate="<b>%{text}</b>",
-            text=_text,
-            line={"color": "rgb(255,154,0)"},
-            mode="markers",
-        ),
-    )
-    fig.update_layout(
-        xaxis_title="Days Until Cure Started",
-        yaxis_title="Days Until Disease Eradicated",
-        showlegend=False,
-    )
-    fig.write_image("docs/cure_start_vs_erad.png", scale=5, width=1000, height=1000)
+    fig.write_image("docs/media/dist_time.png", scale=5, width=1000, height=750)
 
     conn.close()

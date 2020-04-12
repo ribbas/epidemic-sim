@@ -149,6 +149,7 @@ bool epidemic::tick(SST::Cycle_t current_cycle) {
 
         }
 
+        // disable models
         if (!m_keep_recv) {
 
             floor_cure_thresh_din_link->send(new SST::Interfaces::StringEvent(
@@ -181,7 +182,6 @@ bool epidemic::tick(SST::Cycle_t current_cycle) {
                     "0000"
             ));
 
-            // disable randf_rsrch
             mul_inv_rsrch_din_link->send(new SST::Interfaces::StringEvent(
                     std::to_string(m_keep_send) +
                     std::to_string(m_keep_recv) +
@@ -194,7 +194,7 @@ bool epidemic::tick(SST::Cycle_t current_cycle) {
 
         if (m_eradicated && m_loop_lock) {
 
-            int _current_cycle = current_cycle + m_extra_cycles;
+            unsigned int _current_cycle = current_cycle + m_extra_cycles;
             SIMTIME = _current_cycle;
             LOOPEND = (SIMTIME - 2);
             m_loop_lock = false;
