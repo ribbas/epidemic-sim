@@ -84,7 +84,7 @@ if __name__ == "__main__":
             ipc="sock",
             lib_dir="../../../../sit/",
             module="flash_mem",
-            module_dir="${HOME}/SIT/examples/epidemic-sim/verilog/"
+            module_dir="verilog/"
         )
         flash_mem.set_ports((
             ("input", "address", "10"),
