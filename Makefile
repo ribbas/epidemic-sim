@@ -29,12 +29,12 @@ install:
 .ONESHELL:
 run:
 	@$(call iecho,"Running epidemic-sim simulation...")
-	cd build && sst ../run.py ${BSEED} ${ESEED} || { $(call eecho,"SST failed to launch properly - make sure to clear the cache"); exit 1; }
+	cd build && sst ../run.py ${SEED1} ${SEED2} || { $(call eecho,"SST failed to launch properly - make sure to clear the cache"); exit 1; }
 
 .PHONY: stats
 stats:
+	@python stats/parsemem.py ${SEED1} ${SEED2}
 	@mkdir -p data
-	@python stats/parsemem.py build/${SEED}.txt ${SEED}
 
 .PHONY: plot
 plot:
