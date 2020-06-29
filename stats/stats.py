@@ -124,7 +124,7 @@ if args["plot_stats"]:
     import plotly
     from plotly.subplots import make_subplots
 
-    plotly.io.orca.config.executable = "/home/sabbir/Downloads/orca-1.3.1.AppImage"
+    plotly.io.orca.config.executable = "/home/sabbir/SIT/.venv/bin/orca-1.3.1.AppImage"
 
     conn = sqlite3.connect(data_dir)
 
