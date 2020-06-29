@@ -48,7 +48,7 @@ if __name__ == "__main__":
             for stats_line in range(6):
                 _stats[stats_line] = str(int(_stats[stats_line], 2)).zfill(8)
                 if not stats_line:
-                    stats["factor"] = int(_stats[stats_line])
+                    stats["factor"] = int(_stats[stats_line]) * 5
                 elif stats_line == 1:
                     stats["severity"] = float("0." + _stats[stats_line][1:])
                 elif stats_line == 2:
@@ -62,7 +62,8 @@ if __name__ == "__main__":
 
             total_inf = 0
             total_dead = 0
-            today = datetime.date.today()
+            # today = datetime.date.today()
+            today = datetime.date(2020, 3, 1)
 
             for _addr, _data in zip(addr[:-7], data[:-7]):
 

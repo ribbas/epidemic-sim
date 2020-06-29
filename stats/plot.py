@@ -99,6 +99,6 @@ if __name__ == "__main__":
             )
         )
 
-        plotly.io.orca.config.executable = "/home/sabbir/Downloads/orca-1.3.1.AppImage"
-        fig.write_image("docs/sample0.png", scale=5, width=1100, height=900)
+        # plotly.io.orca.config.executable = "/home/sabbir/SIT/.venv/bin/orca-1.3.1.AppImage"
+        # fig.write_image("docs/sample0.png", scale=5, width=1100, height=900)
         fig.show()

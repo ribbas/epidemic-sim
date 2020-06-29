@@ -10,7 +10,7 @@ import sys
 import sst
 
 BASE_PATH = os.getcwd()
-OUTPUT = True
+OUTPUT = False
 CLOCK = "1Hz"
 LINK_DELAY = "1ps"
 
