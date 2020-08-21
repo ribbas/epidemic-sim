@@ -32,7 +32,7 @@ if __name__ == "__main__":
 
     for seed in range(int(sys.argv[1]), int(sys.argv[2]) + 1):
 
-        with open(f"build/{seed}.txt") as mem_dump_file:
+        with open(f"{seed}.txt") as mem_dump_file:
 
             addr = []
             data = []
@@ -100,5 +100,5 @@ if __name__ == "__main__":
             print(f"Cure started on {stats['cure_started_date']}")
             print(f"Cure found on {stats['cure_found_date']}")
             print(f"Disease eradicated on {stats['eradicated_date']}")
-            with open(f"data/{seed}.json", "w") as stats_dump_file:
+            with open(f"../data/{seed}.json", "w") as stats_dump_file:
                 json.dump(stats, stats_dump_file)

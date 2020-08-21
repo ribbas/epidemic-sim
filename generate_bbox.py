@@ -11,7 +11,6 @@ if __name__ == "__main__":
         "lib": "epidemic",
         "module_dir": "../",
         "ipc": "sock",
-        "lib_dir": "../../../../sit/",
     }
 
     if sys.argv[-1] == "systemc":
@@ -82,9 +81,8 @@ if __name__ == "__main__":
         flash_mem = Verilog(
             lib="epidemic",
             ipc="sock",
-            lib_dir="../../../../sit/",
             module="flash_mem",
-            module_dir="verilog/"
+            module_dir="../verilog/"
         )
         flash_mem.set_ports((
             ("input", "address", "10"),
