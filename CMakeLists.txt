@@ -97,6 +97,7 @@ if (${SIT_FOUND})
     )
     _sst_compile_link(libepidemic.so)
     # -------------------- SST EXECUTABLES --------------------
+
     if (NOT START_SEED)
         set(START_SEED 0)
     endif()
