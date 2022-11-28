@@ -1,3 +1,5 @@
+# SIT is back in active development and undergoing major API changes. This version of the model is deprecated and is no longer functional. For updated simulation models, check [SST Interoperability Toolkit](https://github.com/lpsmodsim/SIT).
+
 # epidemic-sim
 
 A disease spread simulator using SST with SystemC, PyRTL and Verilog models.
